@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "name": "asp.net",
+  "private": true,
+  "dependencies": {
+    "jquery": "3.6.1",
+    "jquery-validation-unobtrusive": "^4.0.0",
+    "jquery.validate-mini": "^1.0.0"
+  }
+}
