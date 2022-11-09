@@ -1,0 +1,54 @@
+﻿@model Tuple<IEnumerable<SelectListItem>, IEnumerable<Category>>;
+@inject SignInManager<IdentityUser> signInManager;
+@{
+	ViewBag.Title = $"Categories - {Model.Item1.First(o => o.Selected).Text}";
+}
+
+<section class="py-5 text-center container">
+	<h1 class="fw-light">@ViewBag.Title</h1>
+
+	<div class="btn-group">
+		<button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+			Select Category
+		</button>
+		<ul class="dropdown-menu">
+			@foreach (var item in Model.Item1)
+			{
+				<li><a class="dropdown-item @((@item.Selected) ? "active" : "")" asp-route-category="@item.Value">@item.Text</a></li>
+			}
+		</ul>
+	</div>
+</section>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+	@foreach (var cat in Model.Item2)
+	{
+		foreach (var animal in cat.Animals!)
+		{
+			<div class="col card p-0">
+
+				<div class="card-header">
+					<h3>@animal.Name</h3>
+				</div>
+
+
+				<img class="card-img-top my-auto" src="~/images/animalsImages/@(animal.PicturePath ?? "noimage.jpg")" />
+
+
+
+				<p class="lead mx-auto">@animal.Description</p>
+
+				<div class="card-footer text-center">
+					<a class="btn btn-primary m-1" asp-action="Animal" asp-route-id="@animal.Id">View</a>
+					@if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+					{
+						<a class="btn btn-primary m-1" asp-action="EditAnimal" asp-route-id="@animal.Id">Edit</a>
+						<form class="d-inline" method="post" asp-action="DeleteAnimal" asp-route-id="@animal.Id">
+							<button type="submit" class="btn btn-danger m-1">Delete</button>
+						</form>
+					}
+				</div>
+			</div>
+		}
+	}
+</div>

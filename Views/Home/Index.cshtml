@@ -1,7 +1,28 @@
-﻿
+﻿@model IEnumerable<Animal>;
 @{
-    ViewData["Title"] = "Index";
+	ViewBag.Title = "Home";
 }
+<section class="py-5 text-center container">
+	<h1 class="fw-light">Welcome to Best Pet Shop!</h1>
+	<p class="lead">Our most popular animals are:</p>
+	<div class="card-group">
+		@foreach (var animal in Model)
+		{
+			<div class="card">
+				<div class="card-header">
+					<h3>@animal.Name</h3>
+				</div>
 
-<h1>Index</h1>
+				<img class="card-img-top my-auto" src="~/images/animalsImages/@(animal.PicturePath ?? "noimage.jpg")" />
 
+				<h5 class="card-title mx-auto">@animal.Comments!.Count Comments!</h5>
+
+				<div class="card-footer text-center">
+					<a class="btn btn-primary m-1" asp-action="Animal" asp-route-id="@animal.Id">View</a>
+				</div>
+			</div>
+
+
+		}
+	</div>
+</section>

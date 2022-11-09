@@ -1,0 +1,12 @@
+﻿.logo {
+    width: 150px;
+}
+.anm-img {
+    max-width: 100%;
+}
+.list-group {
+    max-width: 400px;
+}
+.input-group.mb-3.mx-auto {
+    max-width: 500px;
+}

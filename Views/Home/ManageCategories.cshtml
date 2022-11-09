@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Category>;
+@{
+	ViewBag.Title = "Manage Categories";
+}
+
+<section class="py-5 text-center container">
+	<h1 class="fw-light">@ViewBag.Title</h1>
+
+	<a class="btn btn-primary m-1" asp-action="AddCategory">Add Category</a>
+
+	<ol class="list-group list-group-numbered mx-auto">
+		@foreach (var cat in Model)
+		{
+			<li class="list-group-item d-flex justify-content-between align-items-start">
+				<div class="ms-2 me-auto">
+					<div class="fw-bold">@cat.Name</div>
+				</div>
+				<span class="badge bg-danger rounded-pill">
+					<form class="d-inline" method="post" asp-route-id="@cat.Id">
+						<button type="submit" class="btn btn-danger m-1">Delete</button>
+					</form>
+				</span>
+			</li>
+		}
+	</ol>
+</section>

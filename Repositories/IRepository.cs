@@ -1,10 +1,23 @@
-﻿namespace PetShopProj.Repositories
+﻿using PetShopProj.Models;
+
+namespace PetShopProj.Repositories
 {
-    public interface IRepository<T>
+    public interface IRepository
     {
-        IEnumerable<T> GetAll();
-        void Delete(int id);
-        void Update(int id, T entity);
-        void Insert(T entity);
+        //Read
+        IEnumerable<Animal> GetAnimals();
+        Animal? GetAnimal(int id);
+        IEnumerable<Animal> SearchAnimals(string text);
+        IEnumerable<Animal> GetMostPopularAnimals(int count);
+        IEnumerable<Category> GetCategory(string categoryName = "All");
+        Category? GetCategoryById(int id);
+
+        //Write\Delete
+        void AddAnimal(Animal animal);
+        void DeleteAnimal(int id);
+        void AddComment(int animalId, string comment);
+        void Update();
+        void AddCategory(Category newCategory);
+        void DeleteCategory(int id);
     }
 }

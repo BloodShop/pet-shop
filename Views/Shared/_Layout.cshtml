@@ -1,13 +1,87 @@
-﻿<!DOCTYPE html>
+﻿@inject SignInManager<IdentityUser> signInManager;
+
+<!DOCTYPE html>
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>The best Pet Shop In Town</title>
+	<meta name="viewport" content="width=device-width" />
+	<title>@ViewBag.Title</title>
+	<link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="~/css/StyleSheet.css" rel="stylesheet" />
+	<script src="~/lib/jquery/jquery.min.js"></script>
+	<script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+	<script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-    <div>
-        @RenderBody()
-    </div>
+	<nav class="navbar navbar-expand-lg bg-light">
+		<div class="container-fluid">
+			<a class="navbar-brand" asp-controller="Home" asp-action="Index">
+				<img class="logo" src="~/images/logo-min-1.png" alt="" class="d-inline-block align-text-top" />
+				Pet Shop
+			</a>
+
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item">
+						<a class="nav-link @((ViewBag.Title == "Home") ? "active" : "")" asp-controller="Home" asp-action="">Home</a>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link @((ViewBag.Title is string t && t.Length > 10 && t.Substring(0, 10) == "Categories") ? "active" : "")" asp-controller="Home" asp-action="Categories">Categories</a>
+					</li>
+
+					@if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+					{
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								Admin
+							</a>
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item" asp-controller="Home" asp-action="AddAnimal">Add Animal</a></li>
+								<li><a class="dropdown-item" asp-controller="Home" asp-action="ManageCategories">Manage Categories</a></li>
+								<li><hr class="dropdown-divider"></li>
+								<li><a class="dropdown-item" asp-controller="Account" asp-action="ManageUsers">Manage Users</a></li>
+							</ul>
+						</li>
+					}
+
+					@if (signInManager.IsSignedIn(User))
+					{
+						<li>
+							<form class="p-2" method="post" asp-controller="Account" asp-action="Logout">
+								<button type="submit" class="nav-link btn btn-link py-0">
+									Logout @User.Identity!.Name
+								</button>
+							</form>
+						</li>
+					}
+					else
+					{
+						<li class="nav-item">
+							<a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
+						</li>
+					}
+
+				</ul>
+				<form method="post" class="d-flex" asp-controller="Home" asp-action="Search">
+					<input name="text" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+					<button class="btn btn-outline-success" type="submit">Search</button>
+				</form>
+			</div>
+		</div>
+	</nav>
+
+
+	<div class="container">
+		@RenderBody()
+	</div>
 </body>
 </html>

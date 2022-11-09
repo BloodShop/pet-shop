@@ -1,0 +1,31 @@
+﻿@model Animal
+@{
+    ViewBag.Title = $"Animal - {Model.Name}";
+}
+
+<section class="py-5 text-center container">
+    <h1 class="fw-light">@Model.Name</h1>
+	<p class="lead">@Model.Description</p>
+	<p class="lead">Age: @Model.Age year</p>
+	<p class="lead">Category: @Model.Category!.Name</p>
+    <img class="anm-img" src="~/images/animalsImages/@(Model.PicturePath ?? "noimage.jpg")" />
+	
+    <h1 class="fw-light">Comments:</h1>
+	@if (Model.Comments!.Count == 0)
+	{
+		<h3 class="fw-light">There are no comments for this animal.</h3>
+	}
+	<ol class="list-group list-group-numbered list-group-flush mx-auto">
+		@foreach (var comment in @Model.Comments!)
+		{
+			<li class="list-group-item">@comment.Content</li>
+		}
+	</ol>
+
+	<form class="input-group mb-3 mx-auto" method="post">
+		<input class="form-control" style="max-width: 400px" type="text" placeholder="Write your comment here" name="comment" />
+		<button class="btn btn-outline-secondary" asp-route-id="@Model.Id" type="submit" style="border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem">Add Comment</button>
+	</form>
+
+	<a class="btn btn-primary m-1" asp-action="BuyAnimal" asp-route-id="@Model.Id">Buy</a>
+</section>

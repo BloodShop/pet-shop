@@ -1,0 +1,22 @@
+﻿@model Animal
+@{
+	ViewBag.Title = "Purchase Confirmation";
+}
+
+<section class="py-5 text-center container">
+	<h1 class="fw-light">Purchase Confirmation</h1>
+    <h2 class="fw-light">Animal Name: @Model.Name</h2>
+	<p class="lead">Animal Description: @Model.Description</p>
+	<p class="lead">Animal Age: @Model.Age year</p>
+	<p class="lead">Animal Category: @Model.Category!.Name</p>
+	@if (Model.PicturePath != null)
+	{
+		<h6 class="lead">Animal Image:</h6>
+		<img class="anm-img" src="~/images/animalsImages/@Model.PicturePath" />
+	}
+	<h3>Thank you for purchasing from us</h3>
+	<h3>We will be happy to see you again soon...</h3>
+
+	<a class="btn btn-primary m-1" asp-action="Index">Return to home page</a>
+
+</section>
