@@ -6,7 +6,7 @@
 	<h1 class="fw-light">Welcome to Best Pet Shop!</h1>
 	<p class="lead">Our most popular animals are:</p>
 	<div class="card-group">
-		@foreach (var animal in Model)
+		@foreach (var animal in Model!)
 		{
 			<div class="card">
 				<div class="card-header">
@@ -15,7 +15,18 @@
 
 				<img class="card-img-top my-auto" src="~/images/animalsImages/@(animal.PicturePath ?? "noimage.jpg")" />
 
-				<h5 class="card-title mx-auto">@animal.Comments!.Count Comments!</h5>
+				@if (animal.Description != string.Empty && animal.Description != null)
+				{
+					<div class="card-footer text-center">
+						@animal.Description
+					</div>
+				}
+				else 
+				{
+					<div class="card-footer text-center">there isn't description about @animal.Name</div>
+				}
+				
+				<h5 class="card-title mx-auto">@animal.Comments?.Count Comments!</h5>
 
 				<div class="card-footer text-center">
 					<a class="btn btn-primary m-1" asp-action="Animal" asp-route-id="@animal.Id">View</a>

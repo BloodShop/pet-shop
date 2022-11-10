@@ -1,7 +1,7 @@
 ﻿@model Tuple<IEnumerable<Animal>, string>;
 @inject SignInManager<IdentityUser> signInManager;
 @{
-	ViewBag.Title = $"\"{Model.Item2}\" - Search result";
+	ViewBag.Title = $"\"{ViewBag.TitlePage}\" - Search result";
 }
 
 <section class="py-5 text-center container">
@@ -21,10 +21,7 @@
 				<h3>@animal.Name</h3>
 			</div>
 
-
 			<img class="card-img-top my-auto" src="~/images/animalsImages/@(animal.PicturePath ?? "noimage.jpg")" />
-
-
 
 			<p class="lead mx-auto">@animal.Description</p>
 

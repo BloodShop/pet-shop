@@ -17,7 +17,7 @@ namespace PetShopProj.Repositories
 
         public IEnumerable<Animal> GetAnimals() => _context.Animals!;
 
-        public IEnumerable<Animal> GetMostPopularAnimals(int count) => GetAnimals().OrderBy(a => -a.Comments!.Count).Take(count);
+        public IEnumerable<Animal> GetMostPopularAnimals(int count) => GetAnimals().OrderBy(a => -a.Comments?.Count).Take(count);
 
         public IEnumerable<Category> GetCategory(string categoryName = "All")
         {
@@ -30,7 +30,8 @@ namespace PetShopProj.Repositories
         public void AddComment(int animalId, string comment)
         {
             var animal = GetAnimal(animalId);
-            if (animal != null) animal.Comments!.Add(new Comment { Content = comment });
+            if (animal != null) 
+                animal.Comments!.Add(new Comment { Content = comment });
             _context.SaveChanges();
         }
 

@@ -7,9 +7,9 @@ namespace PetShopProj.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        readonly UserManager<IdentityUser> _userManager;
+        readonly SignInManager<IdentityUser> _signInManager;
+        readonly RoleManager<IdentityRole> _roleManager;
 
         public AccountController(UserManager<IdentityUser> userManager, 
             SignInManager<IdentityUser> signInManager,
@@ -20,6 +20,7 @@ namespace PetShopProj.Controllers
             this._roleManager = roleManager;
         }
 
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Logout()
@@ -28,11 +29,10 @@ namespace PetShopProj.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
         [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
+        public IActionResult Login() => View();
+        
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -42,20 +42,17 @@ namespace PetShopProj.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
 
                 if (result.Succeeded)
-                {
                     return RedirectToAction("Index", "Home");
-                }
-
+                
                 ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
             }
             return View(model);
         }
 
+
         [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+        public IActionResult Register() => View();
+        
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
@@ -72,9 +69,7 @@ namespace PetShopProj.Controllers
                 }
 
                 foreach (var error in result.Errors)
-                {
                     ModelState.AddModelError(string.Empty, error.Description);
-                }
             }
             return View(model);
         }
@@ -87,7 +82,7 @@ namespace PetShopProj.Controllers
 
             var model = new List<ManageUsersViewModel>();
 
-            foreach (var user in _userManager.Users.Where(u => u.UserName != User.Identity!.Name))
+            foreach (var user in _userManager.Users.Where(u => u.UserName != User.Identity!.Name).ToList())
             {
                 var userRoleViewModel = new ManageUsersViewModel
                 {
@@ -96,14 +91,10 @@ namespace PetShopProj.Controllers
                 };
 
                 if (await _userManager.IsInRoleAsync(user, role.Name))
-                {
                     userRoleViewModel.IsSelected = true;
-                }
                 else
-                {
                     userRoleViewModel.IsSelected = false;
-                }
-
+                
                 model.Add(userRoleViewModel);
             }
 
@@ -121,13 +112,10 @@ namespace PetShopProj.Controllers
                 var user = await _userManager.FindByIdAsync(item.UserId);
 
                 if (item.IsSelected && !await _userManager.IsInRoleAsync(user, role.Name))
-                {
                     await _userManager.AddToRoleAsync(user, role.Name);
-                }
+                
                 else if (!item.IsSelected && await _userManager.IsInRoleAsync(user, role.Name))
-                {
                     await _userManager.RemoveFromRoleAsync(user, role.Name);
-                }
             }
 
             return View(model);

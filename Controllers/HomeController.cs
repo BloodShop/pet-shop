@@ -10,23 +10,20 @@ namespace PetShopProj.Controllers
 {
     public class HomeController : Controller
     {
-        private IRepository repository;
-        private readonly IWebHostEnvironment hostingEnvironment;
+        readonly IRepository _repo;
+        readonly IWebHostEnvironment _hostingEnvironment;
 
         public HomeController(IRepository repository, IWebHostEnvironment hostingEnvironment)
         {
-            this.repository = repository;
-            this.hostingEnvironment = hostingEnvironment;
+            this._repo = repository;
+            this._hostingEnvironment = hostingEnvironment;
         }
 
-        public IActionResult Index()
-        {
-            return View(repository.GetMostPopularAnimals(2));
-        }
+        public IActionResult Index() => View(_repo.GetMostPopularAnimals(2));
 
         public IActionResult Categories(string category = "All")
         {
-            IEnumerable<SelectListItem> categoriesOptions = repository!.GetCategory()
+            IEnumerable<SelectListItem> categoriesOptions = _repo.GetCategory()
                 .Select(c => c.Name).Reverse().Append("All").Reverse().Select(c => new SelectListItem
                 {
                     Text = c,
@@ -34,38 +31,42 @@ namespace PetShopProj.Controllers
                     Selected = c == category
                 });
 
-            return View(new Tuple<IEnumerable<SelectListItem>, IEnumerable<Category>>(categoriesOptions, repository.GetCategory(category)));
+            return View(new Tuple<IEnumerable<SelectListItem>, IEnumerable<Category>>(categoriesOptions, _repo.GetCategory(category).ToList()));
         }
 
         [HttpPost]
         public IActionResult Search(string text)
         {
-            return View(new Tuple<IEnumerable<Animal>, string>(repository.SearchAnimals(text), text));
+            text = text != null ? text : "";
+            ViewBag.TitlePage = text == "" ? "All" : text;
+            return View(new Tuple<IEnumerable<Animal>, string>(_repo.SearchAnimals(text), text));
         }
 
         [HttpGet]
         public IActionResult Animal(int id)
         {
-            return View(repository.GetAnimal(id));
+            return View(_repo.GetAnimal(id));
         }
 
         [HttpPost]
         public IActionResult Animal(int id, string comment)
         {
-            repository.AddComment(id, comment);
-            return View(repository.GetAnimal(id));
+            if (comment != null && comment != string.Empty)
+                _repo.AddComment(id, comment);
+
+            return View(_repo.GetAnimal(id));
         }
 
         public IActionResult BuyAnimal(int id)
         {
-            return View(repository.GetAnimal(id));
+            return View(_repo.GetAnimal(id));
         }
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public IActionResult AddAnimal()
         {
-            return View(new AddAnimalViewModel { AllCategories = repository.GetCategory() });
+            return View(new AddAnimalViewModel { AllCategories = _repo.GetCategory() });
         }
 
         [HttpPost]
@@ -80,10 +81,10 @@ namespace PetShopProj.Controllers
                     Age = model.Age,
                     Description = model.Description,
                     PicturePath = UploadImage(model),
-                    Category = repository.GetCategoryById(model.CategoryId)
+                    Category = _repo.GetCategoryById(model.CategoryId)
                 };
 
-                repository.AddAnimal(newAnimal);
+                _repo.AddAnimal(newAnimal);
                 return RedirectToAction(nameof(Animal), new { id = newAnimal.Id });
             }
 
@@ -94,7 +95,7 @@ namespace PetShopProj.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult EditAnimal(int id)
         {
-            var animal = repository.GetAnimal(id);
+            var animal = _repo.GetAnimal(id);
             EditAnimalViewModel editAnimalViewModel = new EditAnimalViewModel
             {
                 Id = animal!.Id,
@@ -103,7 +104,7 @@ namespace PetShopProj.Controllers
                 Description = animal.Description,
                 CategoryId = animal.Category!.Id,
                 ExistingPhotoPath = animal.PicturePath,
-                AllCategories = repository.GetCategory()
+                AllCategories = _repo.GetCategory()
             };
             return View(editAnimalViewModel);
         }
@@ -114,24 +115,24 @@ namespace PetShopProj.Controllers
         {
             if (ModelState.IsValid)
             {
-                var animal = repository.GetAnimal(model.Id);
+                var animal = _repo.GetAnimal(model.Id);
                 animal!.Name = model.Name;
                 animal.Age = model.Age;
                 animal.Description = model.Description;
-                animal.Category = repository.GetCategoryById(model.CategoryId);
+                animal.Category = _repo.GetCategoryById(model.CategoryId);
 
                 if (model.Picture != null)
                 {
                     if (model.ExistingPhotoPath != null)
                     {
-                        string filePath = Path.Combine(hostingEnvironment.WebRootPath,
+                        string filePath = Path.Combine(_hostingEnvironment.WebRootPath,
                             "images", "animalsImages", model.ExistingPhotoPath);
                         System.IO.File.Delete(filePath);
                     }
                     animal.PicturePath = UploadImage(model);
                 }
 
-                repository.Update();
+                _repo.Update();
                 return RedirectToAction(nameof(Animal), new { id = animal.Id });
             }
 
@@ -143,7 +144,7 @@ namespace PetShopProj.Controllers
             string? uniqueFileName = null;
             if (model.Picture != null)
             {
-                string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images", "animalsImages");
+                string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "images", "animalsImages");
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Picture.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -159,13 +160,13 @@ namespace PetShopProj.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteAnimal(int id)
         {
-            var animal = repository.GetAnimal(id);
+            var animal = _repo.GetAnimal(id);
             if (animal != null && animal.PicturePath != null)
             {
-                var filePath = Path.Combine(hostingEnvironment.WebRootPath, "images", "animalsImages", animal.PicturePath);
+                var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "images", "animalsImages", animal.PicturePath);
                 System.IO.File.Delete(filePath);
             }
-            repository.DeleteAnimal(id);
+            _repo.DeleteAnimal(id);
             return RedirectToAction(nameof(Categories));
         }
 
@@ -173,21 +174,21 @@ namespace PetShopProj.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult ManageCategories()
         {
-            return View(repository.GetCategory());
+            return View(_repo.GetCategory());
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult ManageCategories(int id)
         {
-            Category category = repository.GetCategoryById(id)!;
+            Category category = _repo.GetCategoryById(id)!;
 
             if (category.Animals!.Count != 0)
             {
                 return View("RemoveCategoryError");
             }
-            repository.DeleteCategory(id);
-            return View(repository.GetCategory());
+            _repo.DeleteCategory(id);
+            return View(_repo.GetCategory());
         }
 
         [HttpGet]
@@ -205,7 +206,7 @@ namespace PetShopProj.Controllers
             {
                 Category newCategory = new Category { Name = model.Name };
 
-                repository.AddCategory(newCategory);
+                _repo.AddCategory(newCategory);
                 return RedirectToAction(nameof(ManageCategories));
             }
             return View();

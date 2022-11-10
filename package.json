@@ -3,7 +3,9 @@
   "name": "asp.net",
   "private": true,
   "dependencies": {
-    "jquery": "3.6.1",
+    "bootstrap": "^5.2.2",
+    "jquery": "^3.6.1",
+    "jquery-validate": "^2.0.0",
     "jquery-validation-unobtrusive": "^4.0.0",
     "jquery.validate-mini": "^1.0.0"
   }

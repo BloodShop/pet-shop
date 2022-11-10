@@ -9,12 +9,19 @@
 	<p class="lead">Age: @Model.Age year</p>
 	<p class="lead">Category: @Model.Category!.Name</p>
     <img class="anm-img" src="~/images/animalsImages/@(Model.PicturePath ?? "noimage.jpg")" />
-	
+
+	@*<h1 class="fw-light">Description:</h1>
+	@if (@Model.Description == null)
+	{
+		<h3 class="fw-light">No description about @Model.Name.</h3>
+	}*@
+
     <h1 class="fw-light">Comments:</h1>
-	@if (Model.Comments!.Count == 0)
+	@if (@Model.Comments!.Count == 0)
 	{
 		<h3 class="fw-light">There are no comments for this animal.</h3>
 	}
+	
 	<ol class="list-group list-group-numbered list-group-flush mx-auto">
 		@foreach (var comment in @Model.Comments!)
 		{
@@ -22,10 +29,10 @@
 		}
 	</ol>
 
-	<form class="input-group mb-3 mx-auto" method="post">
+	<form class="input-group mb-3 mx-auto" method="post" asp-action="Animal">
 		<input class="form-control" style="max-width: 400px" type="text" placeholder="Write your comment here" name="comment" />
-		<button class="btn btn-outline-secondary" asp-route-id="@Model.Id" type="submit" style="border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem">Add Comment</button>
+		<button class="btn btn-outline-secondary" asp-route-comment="" asp-route-id="@Model.Id" type="submit" style="border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem">Add Comment</button>
 	</form>
 
-	<a class="btn btn-primary m-1" asp-action="BuyAnimal" asp-route-id="@Model.Id">Buy</a>
+	@*<a class="btn btn-primary m-1" asp-action="BuyAnimal" asp-route-id="@Model.Id">Buy</a>*@
 </section>
