@@ -132,7 +132,7 @@ namespace PetShopProj.Controllers
                     animal.PicturePath = UploadImage(model);
                 }
 
-                _repo.Update();
+                _repo.SaveChanges();
                 return RedirectToAction(nameof(Animal), new { id = animal.Id });
             }
 

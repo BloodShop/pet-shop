@@ -4,7 +4,7 @@ using PetShopProj.Data;
 using PetShopProj.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddTransient<IRepository, Repository>();
+builder.Services.AddTransient<IRepository, PetRepository>();
 string connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
 builder.Services.AddDbContext<PetDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -55,7 +55,9 @@ using (var scope = app.Services.CreateScope())
 {
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
-        app.UseMigrationsEndPoint();
+    {
+        //app.UseMigrationsEndPoint();
+    }
     else
     {
         app.UseExceptionHandler("/Error");

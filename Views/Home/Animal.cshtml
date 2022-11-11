@@ -10,12 +10,6 @@
 	<p class="lead">Category: @Model.Category!.Name</p>
     <img class="anm-img" src="~/images/animalsImages/@(Model.PicturePath ?? "noimage.jpg")" />
 
-	@*<h1 class="fw-light">Description:</h1>
-	@if (@Model.Description == null)
-	{
-		<h3 class="fw-light">No description about @Model.Name.</h3>
-	}*@
-
     <h1 class="fw-light">Comments:</h1>
 	@if (@Model.Comments!.Count == 0)
 	{

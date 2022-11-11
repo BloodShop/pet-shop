@@ -3,21 +3,21 @@ using PetShopProj.Models;
 
 namespace PetShopProj.Repositories
 {
-    public class Repository : IRepository
+    public class PetRepository : IRepository
     {
         readonly PetDbContext _context;
-
-        public Repository(PetDbContext context) => this._context = context;
+        public PetRepository(PetDbContext context) => this._context = context;
 
         public void AddAnimal(Animal animal)
         {
             _context.Animals!.Add(animal);
-            _context.SaveChanges();
+            SaveChanges();
         }
 
         public IEnumerable<Animal> GetAnimals() => _context.Animals!;
 
-        public IEnumerable<Animal> GetMostPopularAnimals(int count) => GetAnimals().OrderBy(a => -a.Comments?.Count).Take(count);
+        public IEnumerable<Animal> GetMostPopularAnimals(int count) => 
+            GetAnimals().OrderBy(a => -a.Comments?.Count).Take(count);
 
         public IEnumerable<Category> GetCategory(string categoryName = "All")
         {
@@ -30,9 +30,11 @@ namespace PetShopProj.Repositories
         public void AddComment(int animalId, string comment)
         {
             var animal = GetAnimal(animalId);
-            if (animal != null) 
+            if (animal != null)
+            {
                 animal.Comments!.Add(new Comment { Content = comment });
-            _context.SaveChanges();
+                SaveChanges();
+            }
         }
 
         public Category? GetCategoryById(int id) => _context.Categories!.FirstOrDefault(c => c.Id == id);
@@ -47,10 +49,10 @@ namespace PetShopProj.Repositories
 
                 _context.Animals!.Remove(animal);
             }
-            _context.SaveChanges();
+            SaveChanges();
         }
 
-        public void Update() => _context.SaveChanges();
+        public void SaveChanges() => _context.SaveChanges();
 
         public IEnumerable<Animal> SearchAnimals(string text) =>
             _context.Animals!.Where(a => a.Name!.ToUpper().Contains(text.ToUpper()));
@@ -58,17 +60,17 @@ namespace PetShopProj.Repositories
         public void DeleteCategory(int id)
         {
             var category = GetCategoryById(id);
-            if (category!.Animals!.Count == 0)
+            if (category != null && category!.Animals!.Count == 0)
             {
                 _context.Categories!.Remove(category);
-                _context.SaveChanges();
+                SaveChanges();
             }
         }
 
         public void AddCategory(Category newCategory)
         {
             _context.Categories!.Add(newCategory);
-            _context.SaveChanges();
+            SaveChanges();
         }
     }
 }

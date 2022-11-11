@@ -69,8 +69,8 @@
 							<a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
 						</li>
 					}
-
 				</ul>
+
 				<form method="post" class="d-flex" asp-controller="Home" asp-action="Search">
 					<input name="text" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
 					<button class="btn btn-outline-success" type="submit">Search</button>
@@ -78,7 +78,6 @@
 			</div>
 		</div>
 	</nav>
-
 
 	<div class="container">
 		@RenderBody()

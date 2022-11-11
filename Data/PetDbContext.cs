@@ -10,9 +10,9 @@ namespace PetShopProj.Data
     {
         public PetDbContext(DbContextOptions<PetDbContext> options) : base(options) { }
 
-        public virtual DbSet<Animal> Animals { get; set; }
-        public virtual DbSet<Category> Categories { get; set; }
-        public virtual DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<Animal> Animals { get; set; } = null!;
+        public virtual DbSet<Category> Categories { get; set; } = null!;
+        public virtual DbSet<Comment> Comments { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

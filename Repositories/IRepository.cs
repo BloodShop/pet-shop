@@ -16,7 +16,7 @@ namespace PetShopProj.Repositories
         void AddAnimal(Animal animal);
         void DeleteAnimal(int id);
         void AddComment(int animalId, string comment);
-        void Update();
+        void SaveChanges();
         void AddCategory(Category newCategory);
         void DeleteCategory(int id);
     }
