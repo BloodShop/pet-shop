@@ -1,7 +1,7 @@
 ﻿@model Tuple<IEnumerable<Animal>, string>;
 @inject SignInManager<IdentityUser> signInManager;
 @{
-	ViewBag.Title = $"\"{ViewBag.TitlePage}\" - Search result";
+	ViewBag.Title = $"\"{Model.Item2}\" - Search result";
 }
 
 <section class="py-5 text-center container">

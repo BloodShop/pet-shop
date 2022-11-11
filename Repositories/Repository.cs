@@ -6,17 +6,20 @@ namespace PetShopProj.Repositories
     public class PetRepository : IRepository
     {
         readonly PetDbContext _context;
-        public PetRepository(PetDbContext context) => this._context = context;
+        public PetRepository(PetDbContext context) => _context = context;
 
         public void AddAnimal(Animal animal)
         {
-            _context.Animals!.Add(animal);
-            SaveChanges();
+            if (!_context.Animals!.Any(a => a.Name == animal.Name))
+            {
+                _context.Animals!.Add(animal);
+                SaveChanges();
+            }
         }
 
-        public IEnumerable<Animal> GetAnimals() => _context.Animals!;
+        private IEnumerable<Animal> GetAnimals() => _context.Animals!;
 
-        public IEnumerable<Animal> GetMostPopularAnimals(int count) => 
+        public IEnumerable<Animal> GetMostPopularAnimals(int count) =>
             GetAnimals().OrderBy(a => -a.Comments?.Count).Take(count);
 
         public IEnumerable<Category> GetCategory(string categoryName = "All")

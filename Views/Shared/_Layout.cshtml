@@ -1,4 +1,5 @@
-﻿@inject SignInManager<IdentityUser> signInManager;
+﻿@*@model SearchAnimalViewModel;*@
+@inject SignInManager<IdentityUser> signInManager;
 
 <!DOCTYPE html>
 
@@ -18,7 +19,7 @@
 		<div class="container-fluid">
 			<a class="navbar-brand" asp-controller="Home" asp-action="Index">
 				<img class="logo" src="~/images/petshop.jpg" alt="" class="d-inline-block align-text-top" />
-				Pet Shop
+				<b>Arad</b>
 			</a>
 
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,11 +29,11 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item">
-						<a class="nav-link @((ViewBag.Title == "Home") ? "active" : "")" asp-controller="Home" asp-action="">Home</a>
+						<a class="nav-link @((ViewBag.Title == "Home") ? "active" : "")" asp-controller="Home" asp-action="Index">Home</a>
 					</li>
 
 					<li class="nav-item">
-						<a class="nav-link @((ViewBag.Title is string t && t.Length > 10 && t.Substring(0, 10) == "Categories") ? "active" : "")" asp-controller="Home" asp-action="Categories">Categories</a>
+						<a class="nav-link @((ViewBag.Title is string t && t.Length > 7 && t.Substring(0, 7) == "Catalog") ? "active" : "")" asp-controller="Home" asp-action="Categories">Catalog</a>
 					</li>
 
 					@if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
@@ -71,9 +72,10 @@
 					}
 				</ul>
 
-				<form method="post" class="d-flex" asp-controller="Home" asp-action="Search">
-					<input name="text" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+				<form enctype="multipart/form-data" method="post" class="d-flex" asp-controller="Home" asp-action="Search">
+					@*asp-for="Content"*@ <input name="text" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
 					<button class="btn btn-outline-success" type="submit">Search</button>
+					@*<span asp-validation-for="Content" class="text-danger"></span>*@
 				</form>
 			</div>
 		</div>

@@ -1,7 +1,7 @@
 ﻿@model Tuple<IEnumerable<SelectListItem>, IEnumerable<Category>>;
 @inject SignInManager<IdentityUser> signInManager;
 @{
-	ViewBag.Title = $"Categories - {Model.Item1.First(o => o.Selected).Text}";
+	ViewBag.Title = $"Catalog - {Model.Item1.First(o => o.Selected).Text}";
 }
 
 <section class="py-5 text-center container">

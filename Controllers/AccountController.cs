@@ -79,7 +79,6 @@ namespace PetShopProj.Controllers
         public async Task<IActionResult> ManageUsers()
         {
             var role = await _roleManager.FindByNameAsync("Admin");
-
             var model = new List<ManageUsersViewModel>();
 
             foreach (var user in _userManager.Users.Where(u => u.UserName != User.Identity!.Name).ToList())
@@ -113,7 +112,6 @@ namespace PetShopProj.Controllers
 
                 if (item.IsSelected && !await _userManager.IsInRoleAsync(user, role.Name))
                     await _userManager.AddToRoleAsync(user, role.Name);
-                
                 else if (!item.IsSelected && await _userManager.IsInRoleAsync(user, role.Name))
                     await _userManager.RemoveFromRoleAsync(user, role.Name);
             }

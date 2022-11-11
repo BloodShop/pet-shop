@@ -5,7 +5,6 @@ namespace PetShopProj.Repositories
     public interface IRepository
     {
         //Read
-        IEnumerable<Animal> GetAnimals();
         Animal? GetAnimal(int id);
         IEnumerable<Animal> SearchAnimals(string text);
         IEnumerable<Animal> GetMostPopularAnimals(int count);

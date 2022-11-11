@@ -15,8 +15,8 @@ namespace PetShopProj.Controllers
 
         public HomeController(IRepository repository, IWebHostEnvironment hostingEnvironment)
         {
-            this._repo = repository;
-            this._hostingEnvironment = hostingEnvironment;
+            _repo = repository;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Index() => View(_repo.GetMostPopularAnimals(2));
@@ -38,15 +38,11 @@ namespace PetShopProj.Controllers
         public IActionResult Search(string text)
         {
             text = text != null ? text : "";
-            ViewBag.TitlePage = text == "" ? "All" : text;
             return View(new Tuple<IEnumerable<Animal>, string>(_repo.SearchAnimals(text), text));
         }
 
         [HttpGet]
-        public IActionResult Animal(int id)
-        {
-            return View(_repo.GetAnimal(id));
-        }
+        public IActionResult Animal(int id) => View(_repo.GetAnimal(id));
 
         [HttpPost]
         public IActionResult Animal(int id, string comment)
@@ -57,10 +53,7 @@ namespace PetShopProj.Controllers
             return View(_repo.GetAnimal(id));
         }
 
-        public IActionResult BuyAnimal(int id)
-        {
-            return View(_repo.GetAnimal(id));
-        }
+        public IActionResult BuyAnimal(int id) => View(_repo.GetAnimal(id));
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
