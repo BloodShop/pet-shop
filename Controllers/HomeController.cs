@@ -44,9 +44,7 @@ namespace PetShopProj.Controllers
 
             var title = text != null ? text : "";
             var animalsByTitle = _repo.SearchAnimals(title);
-            var v = new SearchTupleModel/*<IEnumerable<Animal>, string>*/(animalsByTitle, title);
-            
-            return View(v);
+            return View(new SearchTupleModel/*<IEnumerable<Animal>, string>*/(animalsByTitle, title));
         }
 
         [HttpGet]

@@ -81,9 +81,6 @@ namespace PetShopProj.Data
 
     internal class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<object>
     {
-        public void Configure(EntityTypeBuilder<object> builder)
-        {
-            //builder.Property(u => u.)
-        }
+        public void Configure(EntityTypeBuilder<object> builder) { }
     }
 }

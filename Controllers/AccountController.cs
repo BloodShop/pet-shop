@@ -20,7 +20,6 @@ namespace PetShopProj.Controllers
             _roleManager = roleManager;
         }
 
-
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Logout()
@@ -29,11 +28,9 @@ namespace PetShopProj.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
         [HttpGet]
         public IActionResult Login() => View();
         
-
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -49,11 +46,9 @@ namespace PetShopProj.Controllers
             return View(model);
         }
 
-
         [HttpGet]
         public IActionResult Register() => View();
         
-
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {

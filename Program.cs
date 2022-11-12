@@ -6,7 +6,9 @@ using PetShopProj.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddTransient<IRepository, PetRepository>();
 string connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
-builder.Services.AddDbContext<PetDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString));
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddDbContext<PetDbContext>(options => 
+    options.UseLazyLoadingProxies().UseSqlServer(connectionString));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     options.Password.RequiredUniqueChars = 0;
@@ -17,6 +19,11 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 }).AddEntityFrameworkStores<PetDbContext>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.Configure<PasswordHasherOptions>(options =>
+            options.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2
+            );
+builder.Services.ConfigureApplicationCookie(config => config.LoginPath = "/Login");
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -25,8 +32,8 @@ using (var scope = app.Services.CreateScope())
     var userMngr = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
     var roleMngr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
+    //ctx.Database.EnsureDeleted();
     ctx.Database.EnsureCreated();
-
 
     var adminRole = new IdentityRole("Admin");
     if (!ctx.Roles.Any())
@@ -41,22 +48,19 @@ using (var scope = app.Services.CreateScope())
         {
             UserName = "Admin",
             Email = "admin@test.com",
-            
+
         };
         var result = userMngr.CreateAsync(adminUser, "123456aA").GetAwaiter().GetResult();
         // add role to user
         userMngr.AddToRoleAsync(adminUser, adminRole.Name).GetAwaiter().GetResult();
     }
-
-    //ctx.Database.EnsureDeleted();
-    //ctx.Database.EnsureCreated();
 }
 
 {
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
-        //app.UseMigrationsEndPoint();
+        app.UseMigrationsEndPoint();
     }
     else
     {
