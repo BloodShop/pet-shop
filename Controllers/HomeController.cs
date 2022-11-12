@@ -132,7 +132,7 @@ namespace PetShopProj.Controllers
             return View();
         }
 
-        private string? UploadImage(AddAnimalViewModel model)
+        string? UploadImage(AddAnimalViewModel model)
         {
             string? uniqueFileName = null;
             if (model.Picture != null)
@@ -141,9 +141,7 @@ namespace PetShopProj.Controllers
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Picture.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
                     model.Picture.CopyTo(fileStream);
-                }
             }
 
             return uniqueFileName;
@@ -165,10 +163,8 @@ namespace PetShopProj.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public IActionResult ManageCategories()
-        {
-            return View(_repo.GetCategory());
-        }
+        public IActionResult ManageCategories() => View(_repo.GetCategory());
+
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
@@ -177,19 +173,16 @@ namespace PetShopProj.Controllers
             Category category = _repo.GetCategoryById(id)!;
 
             if (category.Animals!.Count != 0)
-            {
                 return View("RemoveCategoryError");
-            }
+
             _repo.DeleteCategory(id);
             return View(_repo.GetCategory());
         }
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public IActionResult AddCategory()
-        {
-            return View();
-        }
+        public IActionResult AddCategory() => View();
+
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
