@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PetShopProj.Models;
+using PetShopProj.Models.HelperModels.NonGeneric;
 using PetShopProj.Repositories;
 using PetShopProj.ViewModels;
 using System.Data;
@@ -30,15 +31,22 @@ namespace PetShopProj.Controllers
                     Value = c,
                     Selected = c == category
                 });
-
-            return View(new Tuple<IEnumerable<SelectListItem>, IEnumerable<Category>>(categoriesOptions, _repo.GetCategory(category).ToList()));
+            /*<IEnumerable<SelectListItem>, IEnumerable<Category>>*/
+            return View(new CatalogTupleModel(categoriesOptions, _repo.GetCategory(category).ToList()));
         }
 
         [HttpPost]
         public IActionResult Search(string text)
         {
-            text = text != null ? text : "";
-            return View(new Tuple<IEnumerable<Animal>, string>(_repo.SearchAnimals(text), text));
+            //var tpl0 = (animalsByTxt, title);
+            //(IEnumerable<Animal> animalsByTxt, string title) tpl1 = (_repo.SearchAnimals(text), text != null ? text : "");
+            //var tpl2 = (animalsByTxt: _repo.SearchAnimals(text), title: text != null ? text : "");
+
+            var title = text != null ? text : "";
+            var animalsByTitle = _repo.SearchAnimals(title);
+            var v = new SearchTupleModel/*<IEnumerable<Animal>, string>*/(animalsByTitle, title);
+            
+            return View(v);
         }
 
         [HttpGet]
@@ -57,10 +65,7 @@ namespace PetShopProj.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public IActionResult AddAnimal()
-        {
-            return View(new AddAnimalViewModel { AllCategories = _repo.GetCategory() });
-        }
+        public IActionResult AddAnimal() => View(new AddAnimalViewModel { AllCategories = _repo.GetCategory() });
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
@@ -170,7 +175,7 @@ namespace PetShopProj.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult ManageCategories(int id)
         {
-            Category category = _repo.GetCategoryById(id)!;
+            var category = _repo.GetCategoryById(id)!;
 
             if (category.Animals!.Count != 0)
                 return View("RemoveCategoryError");
@@ -190,7 +195,7 @@ namespace PetShopProj.Controllers
         {
             if (ModelState.IsValid)
             {
-                Category newCategory = new Category { Name = model.Name };
+                var newCategory = new Category { Name = model.Name };
 
                 _repo.AddCategory(newCategory);
                 return RedirectToAction(nameof(ManageCategories));

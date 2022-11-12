@@ -25,7 +25,7 @@
 
 	<form class="input-group mb-3 mx-auto" method="post" asp-action="Animal">
 		<input class="form-control" style="max-width: 400px" type="text" placeholder="Write your comment here" name="comment" />
-		<button class="btn btn-outline-secondary" asp-route-comment="" asp-route-id="@Model.Id" type="submit" style="border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem">Add Comment</button>
+		@*asp-route-comment=""*@ <button class="btn btn-outline-secondary" asp-route-id="@Model.Id" type="submit" style="border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem">Add Comment</button>
 	</form>
 
 	@*<a class="btn btn-primary m-1" asp-action="BuyAnimal" asp-route-id="@Model.Id">Buy</a>*@

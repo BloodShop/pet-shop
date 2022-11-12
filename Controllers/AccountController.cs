@@ -15,9 +15,9 @@ namespace PetShopProj.Controllers
             SignInManager<IdentityUser> signInManager,
             RoleManager<IdentityRole> roleManager)
         {
-            this._userManager = userManager;
-            this._signInManager = signInManager;
-            this._roleManager = roleManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _roleManager = roleManager;
         }
 
 

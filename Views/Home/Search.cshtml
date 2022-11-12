@@ -1,19 +1,20 @@
-﻿@model Tuple<IEnumerable<Animal>, string>;
+﻿@model SearchTupleModel;
+@*@model Tuple/ValueTuple<IEnumerable<Animal> animalsByTitle, string title>*@
 @inject SignInManager<IdentityUser> signInManager;
 @{
-	ViewBag.Title = $"\"{Model.Item2}\" - Search result";
+	ViewBag.Title = $"\"{Model.Title}\" - Search result";
 }
 
 <section class="py-5 text-center container">
 	<h1 class="fw-light">@ViewBag.Title</h1>
-	@if (Model.Item1.Count() == 0)
+	@if (Model.AnimalsByTitle.Count() == 0)
 	{
 		<h1 class="lead">There are no results for the requested search</h1>
 	}
 </section>
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
-	@foreach (var animal in Model.Item1)
+	@foreach (var animal in Model.AnimalsByTitle)
 	{
 		<div class="col card p-0">
 

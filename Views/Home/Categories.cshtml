@@ -1,7 +1,8 @@
-﻿@model Tuple<IEnumerable<SelectListItem>, IEnumerable<Category>>;
+﻿@model CatalogTupleModel;
+@*@model Tuple<IEnumerable<SelectListItem>, IEnumerable<Category>>;*@
 @inject SignInManager<IdentityUser> signInManager;
 @{
-	ViewBag.Title = $"Catalog - {Model.Item1.First(o => o.Selected).Text}";
+	ViewBag.Title = $"Catalog - {Model.CategoriesOptions.First(o => o.Selected).Text}";
 }
 
 <section class="py-5 text-center container">
@@ -12,7 +13,7 @@
 			Select Category
 		</button>
 		<ul class="dropdown-menu">
-			@foreach (var item in Model.Item1)
+			@foreach (var item in Model.CategoriesOptions)
 			{
 				<li><a class="dropdown-item @((@item.Selected) ? "active" : "")" asp-route-category="@item.Value">@item.Text</a></li>
 			}
@@ -21,9 +22,9 @@
 </section>
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
-	@foreach (var cat in Model.Item2)
+	@foreach (var category in Model.SelectedCategory)
 	{
-		foreach (var animal in cat.Animals!)
+		foreach (var animal in category.Animals!)
 		{
 			<div class="col card p-0">
 
