@@ -1,5 +1,8 @@
 ﻿@*@model SearchAnimalViewModel;*@
 @inject SignInManager<IdentityUser> signInManager;
+@{
+	var searchModel = new SearchAnimalViewModel { };
+}
 
 <!DOCTYPE html>
 
@@ -73,9 +76,9 @@
 				</ul>
 
 				<form enctype="multipart/form-data" method="post" class="d-flex" asp-controller="Home" asp-action="Search">
-					@*asp-for="Content"*@ <input name="text" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+					@*asp-validation-for="Content"*@ <span asp-validation-for="@searchModel.Content" class="text-danger"></span>
+					@*asp-for="Content"*@ <input name="text" asp-for="@searchModel.Content" class=" form-control me-2" type="search" placeholder="Search" aria-label="Search">
 					<button class="btn btn-outline-success" type="submit">Search</button>
-					@* asp-validation-for="Content"*@ <span class="text-danger"></span>
 				</form>
 			</div>
 		</div>

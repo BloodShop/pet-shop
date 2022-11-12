@@ -42,9 +42,8 @@ namespace PetShopProj.Controllers
             //(IEnumerable<Animal> animalsByTxt, string title) tpl1 = (_repo.SearchAnimals(text), text != null ? text : "");
             //var tpl2 = (animalsByTxt: _repo.SearchAnimals(text), title: text != null ? text : "");
 
-            var title = text != null ? text : "";
-            var animalsByTitle = _repo.SearchAnimals(title);
-            return View(new SearchTupleModel/*<IEnumerable<Animal>, string>*/(animalsByTitle, title));
+            //var title = text != null ? text : "";
+            return View(new SearchTupleModel/*<IEnumerable<Animal>, string>*/(_repo.SearchAnimals(text), text));
         }
 
         [HttpGet]
