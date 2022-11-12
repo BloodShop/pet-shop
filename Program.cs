@@ -48,7 +48,6 @@ using (var scope = app.Services.CreateScope())
         {
             UserName = "Admin",
             Email = "admin@test.com",
-
         };
         var result = userMngr.CreateAsync(adminUser, "123456aA").GetAwaiter().GetResult();
         // add role to user
