@@ -15,7 +15,6 @@ namespace PetShopProj.Models.DataAnnotations
                 var extension = Path.GetExtension(file.FileName);
                 if (!_extensions.Contains(extension.ToLower()))
                     return new ValidationResult(GetErrorMessage());
-                
             }
 
             return ValidationResult.Success;
