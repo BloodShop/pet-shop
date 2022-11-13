@@ -1,0 +1,15 @@
+﻿@model IEnumerable<string>
+
+@{
+	ViewBag.Title = "Invalid Image Error";
+}
+
+<script type="text/javascript" src="~/js/back-button.js"></script>
+<section class="py-5 text-center container">
+	<h1 class="fw-light">Invalid Image Errors:</h1>
+	@foreach (var error in @Model)
+	{
+		<h2 class="lead">@error</h2>
+	}
+	<a id="back" class="btn btn-primary m-1"@* href="javascript: history.go(-1)"*@ @* asp-controller="Home" asp-action="AddAnimal"*@>Return</a>
+</section>

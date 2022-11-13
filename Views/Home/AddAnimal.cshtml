@@ -47,6 +47,8 @@
             <div class="custom-file">
                 <input asp-for="Picture" class="form-control custom-file-input">
                 <label class="custom-file-label">Choose File...</label>
+                <span asp-validation-for="Picture" class="text-danger"></span>
+                @*<span asp-validation-for="PictureSize" class="text-danger"></span>*@
             </div>
         </div>
     </div>
@@ -59,6 +61,6 @@
         </div>
     </div>
 
-    
+
 </form>
 <script src="~/lib/js/input-on-change.js"></script>

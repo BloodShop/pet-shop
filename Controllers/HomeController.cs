@@ -25,7 +25,7 @@ namespace PetShopProj.Controllers
         public IActionResult Categories(string category = "All")
         {
             IEnumerable<SelectListItem> categoriesOptions = _repo.GetCategory()
-                .Select(c => c.Name).Reverse().Append("All").Reverse().Select(c => new SelectListItem
+                .Select(c => c.Name).Reverse().Append("All").Reverse().Select(c => new SelectListItem()
                 {
                     Text = c,
                     Value = c,
@@ -83,7 +83,7 @@ namespace PetShopProj.Controllers
                 return RedirectToAction(nameof(Animal), new { id = newAnimal.Id });
             }
 
-            return View();
+            return View("InvalidImageError", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
         }
 
         [HttpGet]
@@ -131,13 +131,13 @@ namespace PetShopProj.Controllers
                 return RedirectToAction(nameof(Animal), new { id = animal.Id });
             }
 
-            return View();
+            return View("InvalidImageError", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
         }
 
         string? UploadImage(AddAnimalViewModel model)
         {
             string? uniqueFileName = null;
-            if (model.Picture != null)
+            if (ModelState.IsValid/*model.Picture != null && model.Picture.Length < 1e6*/)
             {
                 string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "images", "animalsImages");
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Picture.FileName;

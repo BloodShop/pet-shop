@@ -46,12 +46,13 @@
             <div class="custom-file">
                 <input asp-for="Picture" class="form-control custom-file-input">
                 <label class="custom-file-label">Choose File...</label>
+                <span asp-validation-for="Picture" class="text-danger"></span>
             </div>
         </div>
     </div>
 
     <div class="form-group row col-sm-4 offset-4">
-        <img src="~/images/animalsImages/@(Model.ExistingPhotoPath?? "noimage.jpg")" class="imageThumbnail"/>
+        <img src="~/images/animalsImages/@(Model.ExistingPhotoPath ?? "noimage.jpg")" class="imageThumbnail"/>
     </div>
 
     <div asp-validation-summary="All" class="text-danger"></div>

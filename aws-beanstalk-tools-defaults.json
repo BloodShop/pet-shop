@@ -1,0 +1,21 @@
+
+{
+    "region" : "eu-central-1",
+    "configuration" : "Debug",
+    "framework"     : "net6.0",
+    "self-contained" : false,
+    "application"    : "PetShop",
+    "environment"    : "PetShop-dev",
+    "app-path"       : "/",
+    "iis-website"    : "Default Web Site",
+    "enable-xray"    : false,
+    "enhanced-health-type" : "basic",
+    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-0e5f1ae38dd5a57af\";\"aws:ec2:vpc,Subnets\"=\"subnet-0197b22adfec2baac\"",
+    "solution-stack"       : "64bit Windows Server Core 2019 v2.10.5 running IIS 10.0",
+    "environment-type"     : "SingleInstance",
+    "cname"                : "petshop-dev",
+    "instance-type"        : "t2.micro",
+    "key-pair"             : "aspnet",
+    "instance-profile"     : "aws-elasticbeanstalk-ec2-role",
+    "service-role"         : "aws-elasticbeanstalk-service-role"
+}
