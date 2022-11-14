@@ -6,7 +6,7 @@ namespace PetShopProj.Models.DataAnnotations
     public class ValidateFileAttribute : ValidationAttribute
     {
         double _maxContent = 1 * 1024 * 1024; //1 MB
-        string[] _sAllowedExt = new string[] { ".jpg", ".gif", ".png", ".jpeg", ".jpeg2000", };
+        string[] _sAllowedExt = new string[] { ".jpg", ".gif", ".png", ".jpeg", ".jpeg2000" };
 
         public ValidateFileAttribute(long maxContent) => _maxContent = maxContent;
         public ValidateFileAttribute(long maxContent, params string[] extentions)
@@ -20,10 +20,7 @@ namespace PetShopProj.Models.DataAnnotations
             var file = value as IFormFile;
 
             if (file == null)
-            {
-                ErrorMessage = "Please upload any photo";
-                return false;
-            }
+                return true;
 
             if (!_sAllowedExt.Contains(file.FileName.Substring(file.FileName.LastIndexOf('.'))))
             {

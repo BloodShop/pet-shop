@@ -14,12 +14,11 @@ namespace PetShopProj.ViewModels
         [Range(1, 120, ErrorMessage = "The field {0} must be between 1 and 120.")]
         public int Age { get; set; }
 
-        [Required]
         [DataType(DataType.Upload)]
         [ValidateFileAttribute(5 * 1024 * 1024)]
         //[MaxFileSize(5 * 1024)]
         //[AllowedExtensions(new string[] { ".jpg", ".png", ".gif" })]
-        public IFormFile Picture { get; set; } = null!;
+        public IFormFile? Picture { get; set; } 
 
         [Required]
         [DataType(DataType.MultilineText)]

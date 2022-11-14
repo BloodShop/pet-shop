@@ -32,7 +32,7 @@ using (var scope = app.Services.CreateScope())
     var userMngr = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
     var roleMngr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-    //ctx.Database.EnsureDeleted();
+    //ctx.Database.EnsureDeleted(); // remove
     ctx.Database.EnsureCreated();
 
     var adminRole = new IdentityRole("Admin");
