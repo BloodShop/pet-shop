@@ -72,6 +72,8 @@ namespace PetShopProj.Repositories
 
         public void AddCategory(Category newCategory)
         {
+            if (_context.Categories!.Any(c => c.Name == newCategory.Name)) return;
+
             _context.Categories!.Add(newCategory);
             SaveChanges();
         }

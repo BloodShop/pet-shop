@@ -19,25 +19,25 @@
     <script src="~/js/theme-mode.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-light">
+    <nav class="navbar navbar-expand-lg bg-dark bg-opacity-25">
         <div class="container-fluid">
             <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                <img class="logo" src="~/images/petshop.jpg" alt="" class="d-inline-block align-text-top" />
+                <img class="logo" src="~/images/pet-shop-svgrepo-com.svg" alt="petShop" class="d-inline-block align-text-top" />
                 <b>Arad</b>
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler bg-white bg-opacity-50" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link @((ViewBag.Title == "Home") ? "active" : "")" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link @((ViewBag.Title == "Home") ? "fw-bold" : "")" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link @((ViewBag.Title is string t && t.Length > 7 && t.Substring(0, 7) == "Catalog") ? "active" : "")" asp-controller="Home" asp-action="Categories">Catalog</a>
+                        <a class="nav-link @((ViewBag.Title is string t && t.Length > 7 && t.Substring(0, 7) == "Catalog") ? "fw-bold" : "")" asp-controller="Home" asp-action="Categories">Catalog</a>
                     </li>
 
                     @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
@@ -47,10 +47,10 @@
                                 Admin
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" asp-controller="Home" asp-action="AddAnimal">Add Animal</a></li>
-                                <li><a class="dropdown-item" asp-controller="Home" asp-action="ManageCategories">Manage Categories</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Home" asp-action="AddAnimal">Add Animal</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Home" asp-action="ManageCategories">Manage Categories</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-controller="Account" asp-action="ManageUsers">Manage Users</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Account" asp-action="ManageUsers">Manage Users</a></li>
                             </ul>
                         </li>
                     }
@@ -74,36 +74,27 @@
                             <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
                         </li>
                     }
-                    @*<li id="modeLi">
+                    <li class="nav-item" id="modeLi">
                         <div id="toggle">
-                            <i class="button">
+                            <i class="button bg-dark bg-opacity-25">
                                 <a>Light<br /><h6>Mode</h6></a>
                                 <span>Dark<br /><h6>Mode</h6></span>
                             </i>
                         </div>
-                    </li>*@
+                    </li>
                 </ul>
-
+                @*https://stackoverflow.com/a/4526286/19827098*@
                 <form enctype="multipart/form-data" method="post" class="d-flex" asp-controller="Home" asp-action="Search">
                     @*asp-validation-for="Content"*@ <span asp-validation-for="@searchModel.Content" class="text-danger"></span>
                     @*asp-for="Content"*@ <input name="text" asp-for="@searchModel.Content" class=" form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>
-
         </div>
     </nav>
 
     <div class="container">
         @RenderBody()
     </div>
-    <script>
-        const body = document.querySelector('body');
-        const toggle = document.getElementById('toggle');
-        toggle.onclick = function () {
-            toggle.classList.toggle('active');
-            body.classList.toggle('active');
-        }
-    </script>
 </body>
 </html>

@@ -11,7 +11,40 @@
     max-width: 500px;
 }
 
+/*---------------*/
+
 body.active {
+    background: #000000;
+    color: #ffffff;
+}
+
+.container.active li > a.dropdown-item,
+.container.active ul.dropdown-item,
+.container.active .dropdown-item {
+    background: #000000;
+    color: #000000;
+}
+
+        .container.active div.card-group,
+        .container.active div.card-header {
+            border-color: #808080;
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .container.active div {
+            border-color: #808080;
+            background: #000000;
+            color: #ffffff;
+        }
+            .container.active div.card {
+                border-color: #808080;
+                background: #000000;
+                color: #ffffff;
+            }
+
+.container.active > div > div {
+    border-color: #808080;
     background: #000000;
     color: #ffffff;
 }
@@ -20,7 +53,7 @@ body.active {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #ffffff;
+    /*background: #ffffff;*/
     transition: 0.5s;
 }
 
@@ -33,43 +66,62 @@ body.active {
     background: #ff6a00;
 }
 
-#toggle .button {
-    position: absolute;
-    top: 2px;
-    left:3px;
-    bottom:2px;
-    width: 3.7em;
-    height: 2.24em;
-    background: #ffffff;
-    border-radius: 100px;
-    transition: 0.5s;
-    cursor: pointer;
-    box-shadow: 3px 4px 40px red;
-}
+    #toggle .button {
+        position: absolute;
+        top: 2px;
+        left:3px;
+        bottom:2px;
+        width: 3.7em;
+        height: 2.24em;
+        background: #ffffff;
+        border-radius: 100px;
+        transition: 0.5s;
+        cursor: pointer;
+        box-shadow: -3px 4px 40px red;
+    }
 
-#toggle .button a {
-    position: relative;
-    justify-content: center;
-    display: flex;
-    font-size: 0.8em;
-    font-weight:900;
-    color:red;
-    font-family: Century;
-    margin-top: 15%;
-}
+        #toggle .button a {
+            position: relative;
+            justify-content: center;
+            display: flex;
+            font-size: 0.8em;
+            font-weight:900;
+            color:red;
+            font-family: Century;
+            margin-top: 15%;
+        }
 
-#toggle .button a h6 {
+            #toggle .button a h6 {
+                font-size: 0.5em;
+                margin-left:0.05em;
+            }
+
+        #toggle .button span {
+            display: none;
+        }
+
+    #toggle.active .button {
+        left:1.1em;
+        background: #000000;
+        border-radius: 100px;
+    }
+
+    #toggle.active .button a {
+        display: none;
+    }
+
+        #toggle.active .button span {
+            display: flex;
+            justify-content: center;
+            margin-top: 15%;
+            color: yellow;
+            font-size:0.8em;
+            font-weight: 400;
+            font-family: Century;
+        }
+
+#toggle.active .button span h6 {
+    margin-left: 0.5em;
     font-size: 0.5em;
-    margin-left:0.05em;
+    font-weight: 500;
 }
-
-#toggle .button span {
-    display: none;
-}
-
-#toggle.active .button {
-    left:1.1em;
-    background: #000000;
-    border-radius: 100px;
-}
-

@@ -35,6 +35,7 @@ namespace PetShopProj.Controllers
             return View(new CatalogTupleModel(categoriesOptions, _repo.GetCategory(category).ToList()));
         }
 
+
         [HttpPost]
         public IActionResult Search(string text)
         {
@@ -59,6 +60,7 @@ namespace PetShopProj.Controllers
         }
 
         public IActionResult BuyAnimal(int id) => View(_repo.GetAnimal(id));
+
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
@@ -85,6 +87,7 @@ namespace PetShopProj.Controllers
 
             return View("InvalidImageError", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
         }
+
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
@@ -134,6 +137,7 @@ namespace PetShopProj.Controllers
             return View("InvalidImageError", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
         }
 
+
         string? UploadImage(AddAnimalViewModel model)
         {
             string? uniqueFileName = null;
@@ -149,6 +153,7 @@ namespace PetShopProj.Controllers
             return uniqueFileName;
         }
 
+
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteAnimal(int id)
@@ -163,10 +168,10 @@ namespace PetShopProj.Controllers
             return RedirectToAction(nameof(Categories));
         }
 
+
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public IActionResult ManageCategories() => View(_repo.GetCategory());
-
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
@@ -181,10 +186,10 @@ namespace PetShopProj.Controllers
             return View(_repo.GetCategory());
         }
 
+
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public IActionResult AddCategory() => View();
-
 
         [HttpPost]
         [Authorize(Roles = "Admin")]

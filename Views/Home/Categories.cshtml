@@ -37,7 +37,7 @@
 				<p class="lead mx-auto">@animal.Description</p>
 
 				<div class="card-footer text-center">
-					<a class="btn btn-primary m-1" asp-action="Animal" asp-route-id="@animal.Id">View</a>
+					<a class="btn btn-primary m-1" asp-action="Animal" asp-route-id="@animal.Id">Details</a>
 					@if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
 					{
 						<a class="btn btn-primary m-1" asp-action="EditAnimal" asp-route-id="@animal.Id">Edit</a>

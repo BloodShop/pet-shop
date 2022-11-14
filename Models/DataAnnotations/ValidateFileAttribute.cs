@@ -5,10 +5,15 @@ namespace PetShopProj.Models.DataAnnotations
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class ValidateFileAttribute : ValidationAttribute
     {
-        double _maxContent = 1e2; //1 MB
-        string[] sAllowedExt = new string[] { ".jpg", ".gif", ".png", ".jpeg", ".jpeg2000", };
+        double _maxContent = 1 * 1024 * 1024; //1 MB
+        string[] _sAllowedExt = new string[] { ".jpg", ".gif", ".png", ".jpeg", ".jpeg2000", };
 
         public ValidateFileAttribute(long maxContent) => _maxContent = maxContent;
+        public ValidateFileAttribute(long maxContent, params string[] extentions)
+        {
+            _maxContent = maxContent;
+            _sAllowedExt = extentions;
+        }
 
         public override bool IsValid(object? value)
         {
@@ -20,9 +25,9 @@ namespace PetShopProj.Models.DataAnnotations
                 return false;
             }
 
-            if (!sAllowedExt.Contains(file.FileName.Substring(file.FileName.LastIndexOf('.'))))
+            if (!_sAllowedExt.Contains(file.FileName.Substring(file.FileName.LastIndexOf('.'))))
             {
-                ErrorMessage = "Please upload Your Photo of type: " + string.Join(" / ", sAllowedExt);
+                ErrorMessage = "Please upload Your Photo of type: " + string.Join(" / ", _sAllowedExt);
                 return false;
             }
 
