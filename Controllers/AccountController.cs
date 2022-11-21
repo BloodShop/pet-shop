@@ -10,14 +10,17 @@ namespace PetShopProj.Controllers
         readonly UserManager<IdentityUser> _userManager;
         readonly SignInManager<IdentityUser> _signInManager;
         readonly RoleManager<IdentityRole> _roleManager;
+        readonly ILogger<HomeController> _logger;
 
         public AccountController(UserManager<IdentityUser> userManager, 
             SignInManager<IdentityUser> signInManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            ILogger<HomeController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -25,6 +28,7 @@ namespace PetShopProj.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
+            _logger.LogInformation($"An account has logged out !!");
             return RedirectToAction("Index", "Home");
         }
 
@@ -39,8 +43,12 @@ namespace PetShopProj.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
 
                 if (result.Succeeded)
+                {
+                    _logger.LogInformation($"{model.UserName} has logged in !!");
                     return RedirectToAction("Index", "Home");
-                
+                }
+
+                _logger.LogInformation($"!! Invalid Login Attempt username: {model.UserName}, pass:{model.Password}");
                 ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
             }
             return View(model);
@@ -60,11 +68,15 @@ namespace PetShopProj.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
+                    _logger.LogInformation($"New registration - username: {model.UserName}, pass: {model.Password}");
                     return RedirectToAction("Index", "Home");
                 }
 
                 foreach (var error in result.Errors)
+                {
+                    _logger.LogError("!!" + error.Description);
                     ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
             return View(model);
         }

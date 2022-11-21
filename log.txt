@@ -1,0 +1,2 @@
+2022-11-21 09:58:19.720 +02:00 [WRN] Failed to determine the https port for redirect.
+2022-11-21 09:58:36.490 +02:00 [ERR] !! Attempted to remove category with animals.

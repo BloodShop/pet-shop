@@ -11,11 +11,13 @@ namespace PetShopProj.Controllers
 {
     public class HomeController : Controller
     {
+        readonly ILogger _logger;
         readonly IRepository _repo;
         readonly IWebHostEnvironment _hostingEnvironment;
 
-        public HomeController(IRepository repository, IWebHostEnvironment hostingEnvironment)
+        public HomeController(IRepository repository, IWebHostEnvironment hostingEnvironment, ILogger<HomeController> logger)
         {
+            _logger = logger;
             _repo = repository;
             _hostingEnvironment = hostingEnvironment;
         }
@@ -54,7 +56,10 @@ namespace PetShopProj.Controllers
         public IActionResult Animal(int id, string comment)
         {
             if (comment != null && comment != string.Empty)
+            {
                 _repo.AddComment(id, comment);
+                _logger.LogInformation("!! Attempted to add an empty comment");
+            }
 
             return View(_repo.GetAnimal(id));
         }
@@ -85,6 +90,7 @@ namespace PetShopProj.Controllers
                 return RedirectToAction(nameof(Animal), new { id = newAnimal.Id });
             }
 
+            _logger.LogError("!! Attempted to add an invalid image"); 
             return View("InvalidImageError", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
         }
 
@@ -134,6 +140,7 @@ namespace PetShopProj.Controllers
                 return RedirectToAction(nameof(Animal), new { id = animal.Id });
             }
 
+            _logger.LogError("!! Attempted to add an invalid image");
             return View("InvalidImageError", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
         }
 
@@ -180,7 +187,10 @@ namespace PetShopProj.Controllers
             var category = _repo.GetCategoryById(id)!;
 
             if (category.Animals!.Count != 0)
+            {
+                _logger.LogError("!! Attempted to remove category with animals.");
                 return View("RemoveCategoryError");
+            }
 
             _repo.DeleteCategory(id);
             return View(_repo.GetCategory());
@@ -200,6 +210,7 @@ namespace PetShopProj.Controllers
                 var newCategory = new Category { Name = model.Name };
 
                 _repo.AddCategory(newCategory);
+                _logger.LogInformation("A category has been added.");
                 return RedirectToAction(nameof(ManageCategories));
             }
             return View();
