@@ -9,6 +9,7 @@ builder.Services.AddTransient<IRepository, PetRepository>();
 builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(ctx.Configuration));
 string connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddCors();
 builder.Services.AddDbContext<PetDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
@@ -72,6 +73,10 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();
+app.UseCors(builder => // Allows to get inforamation fron any api
+{
+    builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+});
 app.UseEndpoints(endpoints => endpoints.MapControllerRoute(
     name: "Default",
     pattern: "{controller=Home}/{Action=Index}/{id?}"));
