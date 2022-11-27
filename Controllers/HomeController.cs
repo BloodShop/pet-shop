@@ -16,7 +16,8 @@ namespace PetShopProj.Controllers
 		readonly IRepository _repo;
 		readonly IWebHostEnvironment _hostingEnvironment;
 		readonly IMemoryCache _memoryCache;
-		const string ANIMAL_KEY = "animale";
+		const string ANIMAL_KEY = "animale"; // MemoryCache
+		const string VISIT_COUNT_KEY = "Visit_Count"; // Session 
 
 		public HomeController(IRepository repository, IWebHostEnvironment hostingEnvironment, ILogger<HomeController> logger, IMemoryCache memoryCache)
 		{
@@ -26,7 +27,19 @@ namespace PetShopProj.Controllers
 			_hostingEnvironment = hostingEnvironment;
 		}
 
-		public IActionResult Index() => View(_repo.GetMostPopularAnimals(2));
+		public IActionResult Index()
+		{
+			int? visitorCount = HttpContext.Session.GetInt32(VISIT_COUNT_KEY);
+			if (visitorCount.HasValue)
+				visitorCount++;
+			else
+				visitorCount = 1;
+			
+			HttpContext.Session.SetInt32(VISIT_COUNT_KEY, visitorCount.Value);
+			_logger.LogInformation($"(session) Number of visits: {visitorCount}");
+
+			return View(_repo.GetMostPopularAnimals(2));
+		}
 
 		public IActionResult AjaxRequest() => View();
 

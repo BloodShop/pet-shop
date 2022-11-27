@@ -10,6 +10,7 @@ builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(ctx.Configuration
 string connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddCors();
+builder.Services.AddSession();
 builder.Services.AddDbContext<PetDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
@@ -68,6 +69,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAuthentication();
