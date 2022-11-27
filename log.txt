@@ -8,3 +8,6 @@
 2022-11-27 09:24:46.741 +02:00 [WRN] Failed to determine the https port for redirect.
 2022-11-27 09:26:38.995 +02:00 [WRN] Failed to determine the https port for redirect.
 2022-11-27 09:27:32.790 +02:00 [WRN] Failed to determine the https port for redirect.
+2022-11-27 09:43:08.422 +02:00 [WRN] Failed to determine the https port for redirect.
+2022-11-27 09:43:31.500 +02:00 [WRN] Failed to determine the https port for redirect.
+2022-11-27 09:45:28.269 +02:00 [WRN] Failed to determine the https port for redirect.

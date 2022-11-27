@@ -74,14 +74,16 @@
                             <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
                         </li>
                     }
-                    <li class="nav-item" id="modeLi">
-                        <div id="toggle">
-                            <i class="button bg-dark bg-opacity-25">
-                                <a>Light<br /><h6>Mode</h6></a>
-                                <span>Dark<br /><h6>Mode</h6></span>
-                            </i>
-                        </div>
-                    </li>
+                    <cache expires-after="TimeSpan.FromMinutes(1)">
+                        <li class="nav-item" id="modeLi">
+                            <div id="toggle">
+                                <i class="button bg-dark bg-opacity-25">
+                                    <a>Light<br /><h6>Mode</h6></a>
+                                    <span>Dark<br /><h6>Mode</h6></span>
+                                </i>
+                            </div>
+                        </li>
+                    </cache>
                 </ul>
                 @*https://stackoverflow.com/a/4526286/19827098*@
                 <form enctype="multipart/form-data" method="post" class="d-flex" asp-controller="Home" asp-action="Search">
