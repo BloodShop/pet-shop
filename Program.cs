@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetShopProj.Data;
 using PetShopProj.Hubs;
@@ -14,8 +13,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddControllersWithViews();
 builder.Services.AddCors();
 builder.Services.AddSession();
-builder.Services.AddSignalR();
-builder.Services.AddDbContext<PetDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString));
+builder.Services.AddSignalR(cfg => cfg.EnableDetailedErrors = true);
+builder.Services.AddDbContext<ICallCenterContext, PetDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     options.Password.RequiredUniqueChars = 0;
@@ -31,8 +30,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.CheckConsentNeeded = context => true;
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
-builder.Services.ConfigureApplicationCookie(config => config.LoginPath = "/Login");
-builder.Services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+builder.Services.ConfigureApplicationCookie(cfg => cfg.LoginPath = "/Login");
 
 var app = builder.Build();
 
@@ -42,7 +40,7 @@ using (var scope = app.Services.CreateScope())
     var userMngr = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
     var roleMngr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-    //ctx.Database.EnsureDeleted(); // remove
+    ctx.Database.EnsureDeleted(); // remove
     ctx.Database.EnsureCreated();
 
     var adminRole = new IdentityRole("Admin");
@@ -90,8 +88,9 @@ app.UseCors(builder => // Allows to get inforamation fron any api
 {
     builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
 });
-app.UseEndpoints(endpoints => {
-    //endpoints.MapHub<MyChatHub>("/mychathub");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<CallCenterHub>("/callcenter");
     endpoints.MapControllerRoute(
     name: "Default",
     pattern: "{controller=Home}/{Action=Index}/{id?}");

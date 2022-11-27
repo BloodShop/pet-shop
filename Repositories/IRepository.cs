@@ -20,6 +20,7 @@ namespace PetShopProj.Repositories
         void DeleteCategory(int id);
 
         //Call Helper
-        Task<int> AddCallAsync(Call model);
+        void AddCall(Call model);
+        Task<int> SaveChangesAsync();
     }
 }

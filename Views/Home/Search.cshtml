@@ -1,6 +1,6 @@
-﻿@model SearchTupleModel;
+﻿@model SearchTupleModel
 @*@model Tuple/ValueTuple<IEnumerable<Animal> animalsByTitle, string title>*@
-@inject SignInManager<IdentityUser> signInManager;
+@inject SignInManager<IdentityUser> signInManager
 @{
 	ViewBag.Title = $"\"{Model.Title}\" - Search result";
 }

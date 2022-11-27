@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <None Include="wwwroot\js\theme-mode.js" />
+    <None Include="wwwroot\lib\moment\min\moment.min.js" />
+    <None Include="wwwroot\lib\moment\moment.js" />
   </ItemGroup>
 
   <ItemGroup>

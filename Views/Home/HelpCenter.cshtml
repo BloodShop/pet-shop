@@ -4,7 +4,8 @@
     ViewData["Title"] = "Help Center";
 }
 @section Scripts {
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/signalr/signalr.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 }
 <div class="row">
@@ -12,8 +13,8 @@
         <h1 class="display-4">Help Center</h1>
         <p>If you have an issue, please fill out the following form to get help from our support team...</p>
         <form id="theForm" method="post" action="HelpCenter">
-            <div asp-validation-summary="ModelOnly" />
             <div class="form-group">
+            <div asp-validation-summary="ModelOnly" />
                 <label asp-for="Name"></label>
                 <input asp-for="Name" class="form-control" value="@(@User.Identity!.Name)" />
                 <span asp-validation-for="Name" class="text-danger"></span>
@@ -31,6 +32,7 @@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-success" />
             </div>
+            <div>@ViewBag.Message</div>
         </form>
     </div>
 </div>

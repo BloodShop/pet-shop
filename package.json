@@ -3,6 +3,7 @@
   "name": "asp.net",
   "private": true,
   "dependencies": {
+    "@aspnet/signalr": "1.1.4",
     "bootstrap": "^5.2.2",
     "jquery": "^3.6.1",
     "jquery-validate": "^2.0.0",

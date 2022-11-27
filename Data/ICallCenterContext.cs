@@ -3,7 +3,7 @@ using PetShopProj.Models;
 
 namespace PetShopProj.Data
 {
-    public interface ICallCenter
+    public interface ICallCenterContext
     {
         DbSet<Call> Calls { get; set; }
     }

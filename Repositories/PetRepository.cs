@@ -5,30 +5,30 @@ namespace PetShopProj.Repositories
 {
     public class PetRepository : IRepository
     {
-        readonly PetDbContext _context;
-        public PetRepository(PetDbContext context) => _context = context;
+        readonly PetDbContext _ctx;
+        public PetRepository(PetDbContext context) => _ctx = context;
 
         public void AddAnimal(Animal animal)
         {
-            if (!_context.Animals!.Any(a => a.Name == animal.Name))
+            if (!_ctx.Animals!.Any(a => a.Name == animal.Name))
             {
-                _context.Animals!.Add(animal);
+                _ctx.Animals!.Add(animal);
                 SaveChanges();
             }
         }
 
-        private IEnumerable<Animal> GetAnimals() => _context.Animals!;
+        IEnumerable<Animal> GetAnimals() => _ctx.Animals!;
 
         public IEnumerable<Animal> GetMostPopularAnimals(int count) =>
             GetAnimals().OrderBy(a => -a.Comments?.Count).Take(count);
 
         public IEnumerable<Category> GetCategory(string categoryName = "All")
         {
-            var categories = _context.Categories!;
+            var categories = _ctx.Categories!;
             return (categoryName == "All") ? categories : categories.Where(c => c.Name == categoryName);
         }
 
-        public Animal? GetAnimal(int id) => _context.Animals!.FirstOrDefault(a => a.Id == id);
+        public Animal? GetAnimal(int id) => _ctx.Animals!.FirstOrDefault(a => a.Id == id);
 
         public void AddComment(int animalId, string comment)
         {
@@ -40,7 +40,7 @@ namespace PetShopProj.Repositories
             }
         }
 
-        public Category? GetCategoryById(int id) => _context.Categories!.FirstOrDefault(c => c.Id == id);
+        public Category? GetCategoryById(int id) => _ctx.Categories!.FirstOrDefault(c => c.Id == id);
 
         public void DeleteAnimal(int id)
         {
@@ -48,42 +48,42 @@ namespace PetShopProj.Repositories
             if (animal != null)
             {
                 foreach (var comment in animal.Comments!)
-                    _context.Comments!.Remove(comment);
+                    _ctx.Comments!.Remove(comment);
 
-                _context.Animals!.Remove(animal);
+                _ctx.Animals!.Remove(animal);
             }
             SaveChanges();
         }
 
-        public void SaveChanges() => _context.SaveChanges();
+        public void SaveChanges() => _ctx.SaveChanges();
 
         public IEnumerable<Animal> SearchAnimals(string text) =>
-            _context.Animals!.Where(a => a.Name!.ToUpper().Contains(text.ToUpper()));
+            _ctx.Animals!.Where(a => a.Name!.ToUpper().Contains(text.ToUpper()));
 
         public void DeleteCategory(int id)
         {
             var category = GetCategoryById(id);
             if (category != null && category!.Animals!.Count == 0)
             {
-                _context.Categories!.Remove(category);
+                _ctx.Categories!.Remove(category);
                 SaveChanges();
             }
         }
 
         public void AddCategory(Category newCategory)
         {
-            if (_context.Categories!.Any(c => c.Name == newCategory.Name)) return;
+            if (_ctx.Categories!.Any(c => c.Name == newCategory.Name)) return;
 
-            _context.Categories!.Add(newCategory);
+            _ctx.Categories!.Add(newCategory);
             SaveChanges();
         }
 
-        public Task<int> AddCallAsync(Call model)
+        public void AddCall(Call model)
         {
             if (model != null)
-                _context.Add(model);
-            
-            return _context.SaveChangesAsync();
+                _ctx.Add(model);            
         }
+
+        public Task<int> SaveChangesAsync() => _ctx.SaveChangesAsync();
     }
 }

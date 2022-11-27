@@ -8,9 +8,9 @@ namespace PetShopProj.Controllers
     [Route("api/calls")]
     public class CallsController : Controller
     {
-        private readonly ICallCenter _ctx;
+        readonly ICallCenterContext _ctx;
 
-        public CallsController(ICallCenter ctx)
+        public CallsController(ICallCenterContext ctx)
         {
             _ctx = ctx;
         }
@@ -19,7 +19,6 @@ namespace PetShopProj.Controllers
         public async Task<IActionResult> Get()
         {
             var calls = await _ctx.Calls.ToListAsync();
-
             return Ok(calls);
         }
 
@@ -33,13 +32,9 @@ namespace PetShopProj.Controllers
 
                 _ctx.Calls.Remove(call);
                 if (await ((DbContext)_ctx).SaveChangesAsync() > 0)
-                {
                     return Ok(new { success = true });
-                }
                 else
-                {
                     return BadRequest("Database Error");
-                }
             }
             catch
             {

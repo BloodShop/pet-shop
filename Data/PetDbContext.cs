@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace PetShopProj.Data
 {
-    public partial class PetDbContext : IdentityDbContext, ICallCenter
+    public partial class PetDbContext : IdentityDbContext, ICallCenterContext
     {
         public PetDbContext(DbContextOptions<PetDbContext> options) : base(options) { }
 

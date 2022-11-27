@@ -2,6 +2,9 @@
 @{
     ViewBag.Title = $"Edit Animal - {Model.Name}";
 }
+@section Scripts {
+    <script src="~/lib/js/input-on-change.js"></script>
+}
 
 <form enctype="multipart/form-data" asp-controller="Home" asp-action="EditAnimal"
       method="post" class="mt-3">
@@ -65,4 +68,3 @@
         </div>
     </div>
 </form>
-<script src="~/lib/js/input-on-change.js"></script>

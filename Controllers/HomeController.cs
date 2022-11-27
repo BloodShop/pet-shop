@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
+using PetShopProj.Hubs;
 using PetShopProj.Models;
 using PetShopProj.Models.HelperModels.NonGeneric;
 using PetShopProj.Repositories;
@@ -17,15 +19,21 @@ namespace PetShopProj.Controllers
 		readonly IRepository _repo;
 		readonly IWebHostEnvironment _hostingEnvironment;
 		readonly IMemoryCache _memoryCache;
-		const string ANIMAL_KEY = "animale"; // MemoryCache
+        readonly IHubContext<CallCenterHub, ICallCenterHub> _hubContext;
+        const string ANIMAL_KEY = "animale"; // MemoryCache
 		const string VISIT_COUNT_KEY = "Visit_Count"; // Session 
 
-		public HomeController(IRepository repository, IWebHostEnvironment hostingEnvironment, ILogger<HomeController> logger, IMemoryCache memoryCache)
+		public HomeController(IRepository repository, 
+			IWebHostEnvironment hostingEnvironment, 
+			ILogger<HomeController> logger, 
+			IMemoryCache memoryCache, 
+			IHubContext<CallCenterHub, ICallCenterHub> hubContext)
 		{
 			_logger = logger;
 			_repo = repository;
 			_memoryCache = memoryCache;
-			_hostingEnvironment = hostingEnvironment;
+            _hubContext = hubContext;
+            _hostingEnvironment = hostingEnvironment;
 		}
 
 		public IActionResult Index()
@@ -42,19 +50,24 @@ namespace PetShopProj.Controllers
 			return View(_repo.GetMostPopularAnimals(2));
 		}
 
+        public IActionResult Calls() => View();
+
         public IActionResult HelpCenter() => View();
 
         [HttpPost]
-        public async Task<IActionResult> Calls(Call model)
+        public async Task<IActionResult> HelpCenter(Call model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if (await _repo.AddCallAsync(model) > 0)
+                    _repo.AddCall(model);
+                    if (await _repo.SaveChangesAsync() > 0)
                     {
                         ViewBag.Message = "Problem Reported...";
                         ModelState.Clear();
+						// Call the hub to alert all the clients
+						await _hubContext.Clients.All.NewCallReceived(model);
                     }
                     else
                         ViewBag.Message = "Failed to save new problem...";
@@ -74,11 +87,9 @@ namespace PetShopProj.Controllers
         public IActionResult Error() =>
 			View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 
-        public IActionResult Calls() => View();
+        public IActionResult AjaxRequest() => View(); // Example of ajax request
 
-        public IActionResult AjaxRequest() => View();
-
-		public IActionResult Categories(string category = "All")
+        public IActionResult Categories(string category = "All")
 		{
 			IEnumerable<SelectListItem> categoriesOptions = _repo.GetCategory()
 				.Select(c => c.Name).Reverse().Append("All").Reverse().Select(c => new SelectListItem()
