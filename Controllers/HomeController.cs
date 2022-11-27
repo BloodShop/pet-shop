@@ -16,7 +16,7 @@ namespace PetShopProj.Controllers
 		readonly IRepository _repo;
 		readonly IWebHostEnvironment _hostingEnvironment;
 		readonly IMemoryCache _memoryCache;
-		const string ANIMAL_KEY = "animales";
+		const string ANIMAL_KEY = "animale";
 
 		public HomeController(IRepository repository, IWebHostEnvironment hostingEnvironment, ILogger<HomeController> logger, IMemoryCache memoryCache)
 		{
@@ -58,15 +58,23 @@ namespace PetShopProj.Controllers
 		[HttpGet]
 		public IActionResult Animal(int id)
 		{
-			Animal animal;
+			if (id <= 0)
+			{
+				_logger.LogError($"{id} not valid id attempt");
+				this.HttpContext.Response.StatusCode = 418; // I'm a teapot
+				return StatusCode(StatusCodes.Status418ImATeapot);
+			}
 
-			if (!_memoryCache.TryGetValue(ANIMAL_KEY, out animal))
+			Animal animal;
+			var secretKeyById = $"{ANIMAL_KEY}{id}";
+
+			if (!_memoryCache.TryGetValue<Animal>(secretKeyById, out animal))
 			{
 				animal = _repo.GetAnimal(id);
 				MemoryCacheEntryOptions options = new();
 				options.SetPriority(CacheItemPriority.Low);
-				options.SetSlidingExpiration(new TimeSpan(10000));
-				_memoryCache.Set(ANIMAL_KEY, animal, options);
+				options.SetSlidingExpiration(new TimeSpan(1000000));
+				_memoryCache.Set(secretKeyById, animal/*, options*/);
 			}
 
 			return View(animal);
@@ -97,7 +105,7 @@ namespace PetShopProj.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				Animal newAnimal = new Animal
+				Animal newAnimal = new()
 				{
 					Name = model.Name,
 					Age = model.Age,
@@ -120,7 +128,7 @@ namespace PetShopProj.Controllers
 		public IActionResult EditAnimal(int id)
 		{
 			var animal = _repo.GetAnimal(id);
-			EditAnimalViewModel editAnimalViewModel = new EditAnimalViewModel
+			EditAnimalViewModel editAnimalViewModel = new()
 			{
 				Id = animal!.Id,
 				Name = animal.Name,
