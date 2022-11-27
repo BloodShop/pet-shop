@@ -18,5 +18,8 @@ namespace PetShopProj.Repositories
         void SaveChanges();
         void AddCategory(Category newCategory);
         void DeleteCategory(int id);
+
+        //Call Helper
+        Task<int> AddCallAsync(Call model);
     }
 }

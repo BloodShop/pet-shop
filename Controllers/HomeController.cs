@@ -7,6 +7,7 @@ using PetShopProj.Models.HelperModels.NonGeneric;
 using PetShopProj.Repositories;
 using PetShopProj.ViewModels;
 using System.Data;
+using System.Diagnostics;
 
 namespace PetShopProj.Controllers
 {
@@ -41,7 +42,41 @@ namespace PetShopProj.Controllers
 			return View(_repo.GetMostPopularAnimals(2));
 		}
 
-		public IActionResult AjaxRequest() => View();
+        public IActionResult HelpCenter() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> Calls(Call model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (await _repo.AddCallAsync(model) > 0)
+                    {
+                        ViewBag.Message = "Problem Reported...";
+                        ModelState.Clear();
+                    }
+                    else
+                        ViewBag.Message = "Failed to save new problem...";
+                }
+            }
+            catch (Exception)
+            {
+                ViewBag.Message = "Threw exception trying to save call";
+            }
+
+            return View();
+        }
+
+        public IActionResult Privacy() => View();
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error() =>
+			View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+
+        public IActionResult Calls() => View();
+
+        public IActionResult AjaxRequest() => View();
 
 		public IActionResult Categories(string category = "All")
 		{

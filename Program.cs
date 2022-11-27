@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetShopProj.Data;
+using PetShopProj.Hubs;
 using PetShopProj.Repositories;
 using Serilog;
 
@@ -9,8 +11,10 @@ builder.Services.AddTransient<IRepository, PetRepository>();
 builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(ctx.Configuration));
 string connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddControllersWithViews();
 builder.Services.AddCors();
 builder.Services.AddSession();
+builder.Services.AddSignalR();
 builder.Services.AddDbContext<PetDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
@@ -20,9 +24,15 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     options.Password.RequireUppercase = false;
     options.Password.RequireDigit = false;
 }).AddEntityFrameworkStores<PetDbContext>();
-builder.Services.AddControllersWithViews();
 builder.Services.Configure<PasswordHasherOptions>(options => options.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2);
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+    options.CheckConsentNeeded = context => true;
+    options.MinimumSameSitePolicy = SameSiteMode.None;
+});
 builder.Services.ConfigureApplicationCookie(config => config.LoginPath = "/Login");
+builder.Services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
 
 var app = builder.Build();
 
@@ -59,11 +69,11 @@ using (var scope = app.Services.CreateScope())
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
-        app.UseMigrationsEndPoint();
+        app.UseDeveloperExceptionPage();
     }
     else
     {
-        app.UseExceptionHandler("/Error");
+        app.UseExceptionHandler("/Home/Error");
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
     }
@@ -72,6 +82,7 @@ using (var scope = app.Services.CreateScope())
 app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseCookiePolicy();
 app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();
@@ -79,7 +90,11 @@ app.UseCors(builder => // Allows to get inforamation fron any api
 {
     builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
 });
-app.UseEndpoints(endpoints => endpoints.MapControllerRoute(
+app.UseEndpoints(endpoints => {
+    //endpoints.MapHub<MyChatHub>("/mychathub");
+    endpoints.MapControllerRoute(
     name: "Default",
-    pattern: "{controller=Home}/{Action=Index}/{id?}"));
+    pattern: "{controller=Home}/{Action=Index}/{id?}");
+
+});
 app.Run();

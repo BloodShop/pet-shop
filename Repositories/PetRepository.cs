@@ -77,5 +77,13 @@ namespace PetShopProj.Repositories
             _context.Categories!.Add(newCategory);
             SaveChanges();
         }
+
+        public Task<int> AddCallAsync(Call model)
+        {
+            if (model != null)
+                _context.Add(model);
+            
+            return _context.SaveChangesAsync();
+        }
     }
 }

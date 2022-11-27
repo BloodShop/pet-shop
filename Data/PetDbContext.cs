@@ -6,13 +6,14 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace PetShopProj.Data
 {
-    public partial class PetDbContext : IdentityDbContext
+    public partial class PetDbContext : IdentityDbContext, ICallCenter
     {
         public PetDbContext(DbContextOptions<PetDbContext> options) : base(options) { }
 
         public virtual DbSet<Animal> Animals { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Comment> Comments { get; set; } = null!;
+        public virtual DbSet<Call> Calls { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -43,6 +44,10 @@ namespace PetShopProj.Data
                 new { Id = 3, AnimalId = 3, Content = "So cute" },
                 new { Id = 4, AnimalId = 3, Content = "HAHAHA" },
                 new { Id = 5, AnimalId = 4, Content = "LOL xD" }
+                );
+
+            modelBuilder.Entity<Call>().HasData(
+                new { Id = 1, Name = "Alon", Email = "koliakovcr7@gmail.com", Problem = "Site too awesome!!", CallTime = DateTime.UtcNow, Answered = false, AnswerTime = DateTime.MinValue }
                 );
 
 
