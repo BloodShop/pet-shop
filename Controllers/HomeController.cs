@@ -63,7 +63,10 @@ namespace PetShopProj.Controllers
 			if (!_memoryCache.TryGetValue(ANIMAL_KEY, out animal))
 			{
 				animal = _repo.GetAnimal(id);
-				_memoryCache.Set(ANIMAL_KEY, animal);
+				MemoryCacheEntryOptions options = new();
+				options.SetPriority(CacheItemPriority.Low);
+				options.SetSlidingExpiration(new TimeSpan(10000));
+				_memoryCache.Set(ANIMAL_KEY, animal, options);
 			}
 
 			return View(animal);
