@@ -1,0 +1,26 @@
+﻿@{
+    Layout = null;
+}
+
+<html>
+<head>
+    <title>Index</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.js">
+    </script>
+    <script>
+        $(function () {
+            $.ajax({
+                url: "http://localhost:5267/Home/GetFirstName",
+                type: "GET"
+            }).done(function (responseText) {
+                $("#myDiv").text(responseText);
+            }).fail(function () {
+                alert("An error has occurred");
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="myDiv"></div>
+</body>
+</html>

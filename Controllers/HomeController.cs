@@ -24,6 +24,8 @@ namespace PetShopProj.Controllers
 
         public IActionResult Index() => View(_repo.GetMostPopularAnimals(2));
 
+        public IActionResult AjaxRequest() => View();
+
         public IActionResult Categories(string category = "All")
         {
             IEnumerable<SelectListItem> categoriesOptions = _repo.GetCategory()
