@@ -36,7 +36,7 @@ namespace PetShopProj.Controllers
 				visitorCount = 1;
 			
 			HttpContext.Session.SetInt32(VISIT_COUNT_KEY, visitorCount.Value);
-			_logger.LogInformation($"(session) Number of visits: {visitorCount}");
+			_logger.LogInformation($"(session) Number of Home visits: {visitorCount}");
 
 			return View(_repo.GetMostPopularAnimals(2));
 		}
