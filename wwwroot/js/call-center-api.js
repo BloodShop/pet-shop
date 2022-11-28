@@ -12,21 +12,12 @@
         })
         .catch(err => console.error(err.toString()));
 
-    connection.on("NewCallReceivedAsync", newCall => {
-        addCall(newCall);
-    });
-    connection.on("CallEditedAsync", editCall => {
-        editCall(newCall);
-    });
+    connection.on("NewCallReceivedAsync", newCall => addCall(newCall));
+    connection.on("CallEditedAsync", editCall => editCall(newCall));
     
 
-    $logBody.on("click", ".delete-button", function () {
-        deleteCall(this);
-    });
-
-    $logBody.on("click", ".edit-button", function () {
-        editCall(this);
-    });
+    $logBody.on("click", ".delete-button", () => deleteCall(this));
+    $logBody.on("click", ".edit-button", () => editCall(this));
 
 
     function addCalls() {

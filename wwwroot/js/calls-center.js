@@ -3,9 +3,8 @@
 $(() => {
     LoadCallsData();
 
-    let calls = [];
-    let $logBody = $("#logBody");
-    //let $theWarning = $("#theWarning");
+    let $theWarning = $("#theWarning");
+    $theWarning.hide();
 
     var connection = new signalR.HubConnectionBuilder().withUrl("/callcenter").build();
     connection.start()
@@ -14,15 +13,9 @@ $(() => {
         })
         .catch(err => console.error(err.toString()));
 
-    connection.on("NewCallReceivedAsync", function() {
-        LoadCallsData();
-    });
-    connection.on("CallDeletedAsync", function () {
-        LoadCallsData();
-    });
-    connection.on("CallEditedAsync", function () {
-        LoadCallsData();
-    });
+    connection.on("NewCallReceivedAsync", () => LoadCallsData());
+    connection.on("CallDeletedAsync", () => LoadCallsData());
+    connection.on("CallEditedAsync", () => LoadCallsData());
 
     function LoadCallsData() {
         var tr = '';
@@ -46,6 +39,8 @@ $(() => {
                 $("#logBody").html(tr);
             },
             error: (error) => {
+                $theWarning.text("Failed to get calls...");
+                $theWarning.show();
                 console.log(error)
             }
         });

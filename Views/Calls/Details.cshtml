@@ -1,5 +1,4 @@
-﻿@model PetShopProj.Models.Call
-
+﻿@model Call
 @{
     ViewBag.Title = "Details";
 }
@@ -12,52 +11,51 @@
     <title>Details</title>
 </head>
 <body>
-
-<div>
-    <h4>Call</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Problem)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Problem)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CallTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CallTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Answered)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Answered)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AnswerTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AnswerTime)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <h4>Call</h4>
+        <hr />
+        <dl class="row">
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Problem)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Problem)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.CallTime)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.CallTime)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Answered)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Answered)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.AnswerTime)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.AnswerTime)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
 </body>
 </html>
