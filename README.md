@@ -90,6 +90,57 @@ This is a sample which shows most of the common features of ASP.NET Identity. Fo
         Only Users In Role Admin can access this page. This uses the [Authorize] on the controller.
 </li>
 
+  <h3>SignalR</h3>
+  https://github.com/BloodShop/pet-shop/blob/7948044ae63007023e9f320aa13194d46922b412/Hubs/CallCenterHub.cs#L6-L19
+  ASP.NET Core SignalR is an open-source library that simplifies adding real-time web functionality to apps. Real-time web functionality enables server-side code to push content to clients instantly. </br>
+  !!Importent!! -- Providing the CallsController that Hub implementing the `ICallCenterHub` interface inorder to get the dependencies (Dependency Injection).
+  
+```javascript
+$(() => {
+    LoadCallsData();
+
+    let $theWarning = $("#theWarning");
+    $theWarning.hide();
+
+    var connection = new signalR.HubConnectionBuilder().withUrl("/callcenter").build();
+    connection.start()
+        .then(() => connection.invoke("JoinCallCenters"))
+        .catch(err => console.error(err.toString()));
+
+    connection.on("NewCallReceivedAsync", () => LoadCallsData());
+    connection.on("CallDeletedAsync", () => LoadCallsData());
+    connection.on("CallEditedAsync", () => LoadCallsData());
+
+    function LoadCallsData() {
+        var tr = '';
+        $.ajax({
+            url: '/Calls/GetCalls',
+            method: 'GET',
+            success: (result) => {
+                $.each(result, (k, v) => {
+                    tr += `<tr>
+                        <td>${v.Name}</td>
+                        <td>${v.Email}</td>
+                        <td>${moment(v.CallTime).format("llll")}</td>
+                        <td>
+                            <a href="../Calls/Details?id=${v.Id}" class="btn btn-sm btn-success deatils-button" data-id="${v.Id}">Details</a>
+                            <a href="../Calls/Edit?id=${v.Id}" class="btn btn-sm btn-danger edit-button" data-id="${v.Id}">Edit</a>
+                            <a href="../Calls/Delete?id=${v.Id}" class="btn btn-sm btn-warning delete-button" data-id="${v.Id}">Delete</a>
+                        </td>
+                    </tr>`;
+                })
+                $("#logBody").html(tr);
+            },
+            error: (error) => {
+                $theWarning.text("Failed to get calls...");
+                $theWarning.show();
+                console.log(error)
+            }
+        });
+    }
+});
+```
+
   <h3>Bonus</h3>
   A global dark theme for the web. Dark Mode is an extension that helps you quickly turn the screen (browser) to dark at night time
   https://github.com/BloodShop/pet-shop/blob/bca1335742dcb8e3f82fede2aa8a21cb9e395060/wwwroot/js/theme-mode.js#L1-L33
