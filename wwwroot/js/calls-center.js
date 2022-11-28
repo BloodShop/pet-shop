@@ -1,64 +1,53 @@
-﻿// calls-center.js
-"use strict";
+﻿/*import { signalR } from '../lib/signalr/signalr.js'*/
 
-const client = new signalR.HubConnectionBuilder()
-    .withUrl("/callcenter")
-    .build();
+$(() => {
+    LoadCallsData();
 
-client.on("NewCallReceived", newCall => {
-    addCall(newCall);
-});
+    let calls = [];
+    let $logBody = $("#logBody");
+    //let $theWarning = $("#theWarning");
 
-let $theWarning = $("#theWarning");
-let $logBody = $("#logBody");
-let calls = [];
-
-$theWarning.hide();
-$logBody.on("click", ".delete-button", function () {
-    deleteCall(this);
-});
-
-function addCalls() {
-    $logBody.empty();
-    $.each(calls, (i, c) => addCall(c));
-}
-
-function addCall(call) {
-    let template = `<tr>
-            <td>${call.name}</td>
-            <td>${call.email}</td>
-            <td>${moment(call.callTime).format("llll")}</td>
-            <td><button class="btn btn-sm btn-warning delete-button" data-id="${call.id}">Clear</button></td>
-        </tr>`;
-    $logBody.append($(template));
-}
-
-function deleteCall(button) {
-    let id = $(button).attr("data-id");
-    $.ajax({
-        url: `/api/calls/${id}`,
-        method: "delete"
-    })
-        .then(res => {
-            $(button).closest("tr").remove();
-        });
-}
-
-function getCalls() {
-    $.getJSON("/api/calls")
-        .then(res => {
-            calls = res;
-            addCalls();
-            client.start()
-                .then(() => {
-                    client.invoke("JoinCallCenters");
-                })
-                .catch(err => console.error(err.toString()));
+    var connection = new signalR.HubConnectionBuilder().withUrl("/callcenter").build();
+    connection.start()
+        .then(() => {
+            connection.invoke("JoinCallCenters");
         })
-        .catch(() => {
-            $theWarning.text("Failed to get calls...");
-            $theWarning.show();
-        });
-}
+        .catch(err => console.error(err.toString()));
 
-getCalls();
+    connection.on("NewCallReceivedAsync", function() {
+        LoadCallsData();
+    });
+    connection.on("CallDeletedAsync", function () {
+        LoadCallsData();
+    });
+    connection.on("CallEditedAsync", function () {
+        LoadCallsData();
+    });
+
+    function LoadCallsData() {
+        var tr = '';
+
+        $.ajax({
+            url: '/Calls/GetCalls',
+            method: 'GET',
+            success: (result) => {
+                $.each(result, (k, v) => {
+                    tr += `<tr>
+                        <td>${v.Name}</td>
+                        <td>${v.Email}</td>
+                        <td>${moment(v.CallTime).format("llll")}</td>
+                        <td>
+                            <a href="../Calls/Details?id=${v.Id}" class="btn btn-sm btn-success deatils-button" data-id="${v.Id}">Details</a>
+                            <a href="../Calls/Edit?id=${v.Id}" class="btn btn-sm btn-danger edit-button" data-id="${v.Id}">Edit</a>
+                            <a href="../Calls/Delete?id=${v.Id}" class="btn btn-sm btn-warning delete-button" data-id="${v.Id}">Delete</a>
+                        </td>
+                    </tr>`;
+                })
+                $("#logBody").html(tr);
+            },
+            error: (error) => {
+                console.log(error)
+            }
+        });
+    }
+});

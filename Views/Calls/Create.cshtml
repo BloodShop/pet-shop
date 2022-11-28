@@ -1,5 +1,5 @@
 ﻿@model Call
-@inject SignInManager<IdentityUser> signInManager;
+@inject SignInManager<IdentityUser> signInManager
 @{
     ViewData["Title"] = "Help Center";
 }
@@ -12,9 +12,9 @@
     <div class="col-6 offset-3">
         <h1 class="display-4">Help Center</h1>
         <p>If you have an issue, please fill out the following form to get help from our support team...</p>
-        <form id="theForm" method="post" action="HelpCenter">
+        <form id="theForm" method="post">
             <div class="form-group">
-            <div asp-validation-summary="ModelOnly" />
+                <div asp-validation-summary="ModelOnly" />
                 <label asp-for="Name"></label>
                 <input asp-for="Name" class="form-control" value="@(@User.Identity!.Name)" />
                 <span asp-validation-for="Name" class="text-danger"></span>

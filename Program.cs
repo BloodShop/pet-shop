@@ -10,7 +10,10 @@ builder.Services.AddTransient<IRepository, PetRepository>();
 builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(ctx.Configuration));
 string connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+});
 builder.Services.AddCors();
 builder.Services.AddSession();
 builder.Services.AddSignalR(cfg => cfg.EnableDetailedErrors = true);

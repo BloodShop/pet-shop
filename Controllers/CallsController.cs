@@ -1,29 +1,110 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using PetShopProj.Data;
+using PetShopProj.Hubs;
+using PetShopProj.Models;
 
 namespace PetShopProj.Controllers
 {
-    [ApiController]
-    [Route("api/calls")]
     public class CallsController : Controller
     {
-        readonly ICallCenterContext _ctx;
+        readonly PetDbContext _ctx;
+        readonly IHubContext<CallCenterHub, ICallCenterHub> _signalrHub;
 
-        public CallsController(ICallCenterContext ctx)
+        public CallsController(PetDbContext context,
+            IHubContext<CallCenterHub, ICallCenterHub> signalrHub)
         {
-            _ctx = ctx;
+            _signalrHub = signalrHub;
+            _ctx = context;
         }
+
+        // GET: Calls
+        public async Task<IActionResult> Index() => View(await _ctx.Calls.ToListAsync());
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult GetCalls()
         {
-            var calls = await _ctx.Calls.ToListAsync();
-            return Ok(calls);
+            var res = _ctx.Calls.ToList();
+            return Ok(res);
         }
 
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id)
+        // GET: Calls/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null || _ctx.Calls == null)
+                return NotFound();
+
+            var call = await _ctx.Calls.FirstOrDefaultAsync(m => m.Id == id);
+            if (call == null)
+                return NotFound();
+
+            return View(call);
+        }
+
+        // GET: Calls/Create
+        public IActionResult Create() => View();
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,Name,Email,Problem,CallTime,Answered,AnswerTime")] Call call)
+        {
+            if (ModelState.IsValid)
+            {
+                _ctx.Add(call);
+                await _ctx.SaveChangesAsync();
+                await _signalrHub.Clients.Group("CallCenters").NewCallReceivedAsync(call);
+                //await _signalrHub.Clients.All.SendAsync("LoadCalls");
+                return RedirectToAction(nameof(Index));
+            }
+            return View(call);
+        }
+
+        // GET: Calls/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _ctx.Calls == null)
+                return NotFound();
+
+            var call = await _ctx.Calls.FindAsync(id);
+            if (call == null)
+                return NotFound();
+
+            return View(call);
+        }
+
+        // POST: Calls/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email,Problem,CallTime,Answered,AnswerTime")] Call call)
+        {
+            if (id != call.Id)
+                return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _ctx.Update(call);
+                    await _ctx.SaveChangesAsync();
+                    await _signalrHub.Clients.Group("CallCenters").CallEditedAsync(call);
+                    //await _signalrHub.Clients.All.SendAsync("LoadCalls");
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CallExists(call.Id))
+                        return NotFound();
+                    else
+                        throw;
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(call);
+        }
+
+        // GET: Calls/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
             try
             {
@@ -31,8 +112,13 @@ namespace PetShopProj.Controllers
                 if (call == null) return BadRequest();
 
                 _ctx.Calls.Remove(call);
-                if (await ((DbContext)_ctx).SaveChangesAsync() > 0)
-                    return Ok(new { success = true });
+                if (await _ctx.SaveChangesAsync() > 0)
+                {
+                    await _signalrHub.Clients.Group("CallCenters").CallDeletedAsync();
+                    //await _signalrHub.Clients.All.SendAsync("LoadCalls");
+                    //return Ok(new { success = true, deletedCall = call });
+                    return RedirectToAction(nameof(Index));
+                }
                 else
                     return BadRequest("Database Error");
             }
@@ -41,5 +127,24 @@ namespace PetShopProj.Controllers
                 return StatusCode(500);
             }
         }
+
+        // POST: Calls/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (_ctx.Calls == null)
+                return Problem("Entity set 'PetDbContext.Calls' is null.");
+            var call = await _ctx.Calls.FindAsync(id);
+            if (call != null)
+                _ctx.Calls.Remove(call);
+
+            await _ctx.SaveChangesAsync();
+            await _signalrHub.Clients.Group("CallCenters").CallDeletedAsync();
+            //await _signalrHub.Clients.All.SendAsync("LoadCalls");
+            return RedirectToAction(nameof(Index));
+        }
+
+        bool CallExists(int id) => _ctx.Calls.Any(e => e.Id == id);
     }
 }

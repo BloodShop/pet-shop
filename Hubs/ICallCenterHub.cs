@@ -4,7 +4,9 @@ namespace PetShopProj.Hubs
 {
     public interface ICallCenterHub
     {
-        Task NewCallReceived(Call newCall);
+        Task NewCallReceivedAsync(Call newCall);
         Task JoinCallCenters();
+        Task CallDeletedAsync();
+        Task CallEditedAsync(Call editCall);
     }
 }

@@ -1,14 +1,26 @@
-﻿@{
-    ViewData["Title"] = "CallCenters";
+﻿@model IEnumerable<Call>
+@{
+    ViewBag.Title = "Calls";
 }
 @section Scripts {
     <script src="~/lib/signalr/signalr.js"></script>
     <script src="~/lib/moment/min/moment.min.js"></script>
     <script src="~/js/calls-center.js"></script>
 }
-<div class="row">
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body class="row">
     <div class="col-10 offset-1">
         <h3>Call Log</h3>
+        <p>
+            <a asp-action="Create">Create New Call</a>
+        </p>
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -20,6 +32,7 @@
             </thead>
             <tbody id="logBody"></tbody>
         </table>
-        <div id="theWarning" class="alert alert-warning hide"></div>
+        @*<div id="theWarning" class="alert alert-warning hide"></div>*@
     </div>
-</div>
+</body>
+</html>

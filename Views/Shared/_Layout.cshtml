@@ -52,8 +52,8 @@
                             Center
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item text-dark" asp-controller="Home" asp-action="HelpCenter">Help Center</a></li>
-                            <li><a class="dropdown-item text-dark" asp-controller="Home" asp-action="Calls">Calls</a></li>
+                            <li><a class="dropdown-item text-dark" asp-controller="Calls" asp-action="Index">Calls</a></li>
+                            <li><a class="dropdown-item text-dark" asp-controller="Calls" asp-action="Create">Help Center</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-dark" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
                         </ul>
@@ -121,7 +121,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer navbar-fixed-bottom">
         <div class="container">
             &copy; 2022 - PetShopArad - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
@@ -145,8 +145,10 @@
     integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=">
     </script>
     </environment>*@
-    <script src="~/js/site.js" asp-append-version="true"></script>
 
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/signalr/signalr.js"></script>
+    <script src="~/lib/moment/min/moment.min.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
