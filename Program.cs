@@ -6,6 +6,10 @@ using PetShopProj.Repositories;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseKestrel()
+    .UseContentRoot(Directory.GetCurrentDirectory())
+    .UseIISIntegration();
+    /*.UseUrls("http://localhost:8080/");*/
 builder.Services.AddTransient<IRepository, PetRepository>();
 builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(ctx.Configuration));
 string connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];

@@ -1,0 +1,14 @@
+version: '3.3'
+
+services:
+  db:
+    image: bloodshop/petshopdb:1.0
+    restart: always
+
+  app:
+    depends_on:
+      - db
+    image: bloodshop/petshopapp:1.0
+    ports:
+      - "3000:80"
+    restart: always

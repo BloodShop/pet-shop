@@ -8,9 +8,7 @@ $(() => {
 
     var connection = new signalR.HubConnectionBuilder().withUrl("/callcenter").build();
     connection.start()
-        .then(() => {
-            connection.invoke("JoinCallCenters");
-        })
+        .then(() => connection.invoke("JoinCallCenters"))
         .catch(err => console.error(err.toString()));
 
     connection.on("NewCallReceivedAsync", () => LoadCallsData());
@@ -19,7 +17,6 @@ $(() => {
 
     function LoadCallsData() {
         var tr = '';
-
         $.ajax({
             url: '/Calls/GetCalls',
             method: 'GET',
