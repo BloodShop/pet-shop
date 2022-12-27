@@ -1,10 +1,41 @@
-# PetShop ASP.NET web Project using bootstrap lib
+# PetShop ASP.NET Core web application Project 
 
-<h3>Asp.Net Core MVC web app using MSSQL and EF6</h3>
+<h3>Asp.Net Core MVC web app using mssql, ef6, docker, jquery, sass, CORS, restAPI, socket, hubs & signalR, vanilla js, bootstrap lib</h3>
 <p align="center" >Main catalog page where you can scroll and choose animel to explore and comment</p>
 <p align="center">
   <img width="600"  src="https://user-images.githubusercontent.com/23366804/203003954-ec9ed699-a255-4281-ac26-0a370799e4a9.png">
 </p>
+
+<h3>Docker instuctions</h3>
+pulling images to your local device:
+
+```javascript
+  $ docker pull bloodshop/petshopapp:1.0  # https://hub.docker.com/repository/docker/bloodshop/petshopapp
+  $ docker pull bloodshop/petshopdb:1.0  # https://hub.docker.com/repository/docker/bloodshop/petshopdb
+  $ docker-compose up -d
+```
+
+<h2>docker-compose.yml</h2>
+
+```python
+version: '3.3'
+
+services:
+  db:
+    image: bloodshop/petshopdb:1.0
+    restart: always
+
+  app:
+    depends_on:
+      - db
+    image: bloodshop/petshopapp:1.0
+    ports: 
+        - "3000:80" 
+        - "3001:433"
+    networks: 
+       - db-bridge
+    restart: always
+```
 
 <h3>What's in this project</h3>
 This is a sample which shows most of the common features of ASP.NET Identity. For more information on it, please visit http://asp.net/identity 
