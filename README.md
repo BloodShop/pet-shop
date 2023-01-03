@@ -1,6 +1,6 @@
 # PetShop ASP.NET Core web application Project 
 
-<h3>Asp.Net Core MVC web app using mssql, ef6, docker, jquery, sass, CORS, restAPI, socket, hubs & signalR, vanilla js, bootstrap library</h3>
+<h3>Asp.Net Core MVC web appplication using mssql, ef6, docker, jquery, sass, CORS, restAPI, socket, hubs & signalR, vanilla js, bootstrap library</h3>
 <p align="center" >Main catalog page where you can scroll and choose animel to explore and comment</p>
 <p align="center">
   <img width="600"  src="https://user-images.githubusercontent.com/23366804/203003954-ec9ed699-a255-4281-ac26-0a370799e4a9.png">
