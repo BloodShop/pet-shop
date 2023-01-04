@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PetShopProj.Configuration;
 using PetShopProj.Data;
 using PetShopProj.Hubs;
 using PetShopProj.Repositories;
@@ -10,34 +11,37 @@ builder.WebHost.UseKestrel()
     .UseContentRoot(Directory.GetCurrentDirectory())
     .UseIISIntegration();
     /*.UseUrls("http://localhost:8080/");*/
-builder.Services.AddTransient<IRepository, PetRepository>();
 builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(ctx.Configuration));
-string connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddControllersWithViews().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.PropertyNamingPolicy = null;
-});
-builder.Services.AddCors();
-builder.Services.AddSession();
-builder.Services.AddSignalR(cfg => cfg.EnableDetailedErrors = true);
-builder.Services.AddDbContext<ICallCenterContext, PetDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString));
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
-{
-    options.Password.RequiredUniqueChars = 0;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequireDigit = false;
-}).AddEntityFrameworkStores<PetDbContext>();
-builder.Services.Configure<PasswordHasherOptions>(options => options.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2);
-builder.Services.Configure<CookiePolicyOptions>(options =>
-{
-    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-    options.CheckConsentNeeded = context => true;
-    options.MinimumSameSitePolicy = SameSiteMode.None;
-});
-builder.Services.ConfigureApplicationCookie(cfg => cfg.LoginPath = "/Login");
+builder.Services.InstallerServices(
+    builder.Configuration,
+    typeof(IServiceInstaller).Assembly);
+//builder.Services.AddTransient<IRepository, PetRepository>();
+//string connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
+//builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+//builder.Services.AddControllersWithViews().AddJsonOptions(options =>
+//{
+//    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+//});
+//builder.Services.AddDbContext<ICallCenterContext, PetDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString));
+//builder.Services.AddCors();
+//builder.Services.AddSession();
+//builder.Services.AddSignalR(cfg => cfg.EnableDetailedErrors = true);
+//builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+//{
+//    options.Password.RequiredUniqueChars = 0;
+//    options.Password.RequireNonAlphanumeric = false;
+//    options.Password.RequireLowercase = false;
+//    options.Password.RequireUppercase = false;
+//    options.Password.RequireDigit = false;
+//}).AddEntityFrameworkStores<PetDbContext>();
+//builder.Services.Configure<PasswordHasherOptions>(options => options.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2);
+//builder.Services.Configure<CookiePolicyOptions>(options =>
+//{
+//    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+//    options.CheckConsentNeeded = context => true;
+//    options.MinimumSameSitePolicy = SameSiteMode.None;
+//});
+//builder.Services.ConfigureApplicationCookie(cfg => cfg.LoginPath = "/Login");
 
 var app = builder.Build();
 

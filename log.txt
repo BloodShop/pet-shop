@@ -725,3 +725,6 @@ System.InvalidOperationException: Unable to resolve service for type 'PetShopPro
 2022-12-25 13:37:59.484 +02:00 [WRN] Failed to determine the https port for redirect.
 2022-12-25 13:50:32.561 +02:00 [WRN] Failed to determine the https port for redirect.
 2022-12-25 15:13:01.124 +02:00 [WRN] Failed to determine the https port for redirect.
+2022-12-28 15:52:51.571 +02:00 [WRN] Failed to determine the https port for redirect.
+2023-01-04 13:20:14.325 +02:00 [WRN] Failed to determine the https port for redirect.
+2023-01-04 13:46:08.592 +02:00 [WRN] Failed to determine the https port for redirect.

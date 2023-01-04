@@ -9,6 +9,9 @@ services:
     depends_on:
       - db
     image: bloodshop/petshopapp:1.0
-    ports:
-      - "3000:80"
+    ports: 
+        - "3000:80" 
+        - "3001:433"
+    networks: 
+       - db-bridge
     restart: always
