@@ -9,7 +9,7 @@ namespace PetShopProj.Configuration
         public void Install(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IRepository, PetRepository>();
-            string connectionString = configuration["ConnectionStrings:DefaultConnection"];
+            string connectionString = configuration["ConnectionStrings:AzureConnection"];
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddControllersWithViews().AddJsonOptions(options =>
             {

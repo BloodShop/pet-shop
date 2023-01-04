@@ -21,8 +21,9 @@ namespace PetShopProj.Configuration
             return services;
 
             static bool IsAssignableToType<T>(TypeInfo typeInfo) => 
-                typeof(T).IsAssignableFrom(typeInfo) && 
-                !typeInfo.IsInterface && !typeInfo.IsAbstract;
+                typeof(T).IsAssignableFrom(typeInfo) &&
+                !typeInfo.IsInterface &&
+                !typeInfo.IsAbstract;
         }
     }
 }

@@ -50,37 +50,6 @@ namespace PetShopProj.Controllers
             return View(_repo.GetMostPopularAnimals(2));
         }
 
-        //public IActionResult Calls() => View();
-
-        //  public IActionResult HelpCenter() => View();
-
-        //  [HttpPost]
-        //  public async Task<IActionResult> HelpCenter(Call model)
-        //  {
-        //      try
-        //      {
-        //          if (ModelState.IsValid)
-        //          {
-        //              _repo.AddCall(model);
-        //              if (await _repo.SaveChangesAsync() > 0)
-        //              {
-        //                  ViewBag.Message = "Problem Reported...";
-        //                  ModelState.Clear();
-        //// Call the hub to alert all the clients
-        //await _hubContext.Clients.Group("CallCenters").NewCallReceived(model);
-        //              }
-        //              else
-        //                  ViewBag.Message = "Failed to save new problem...";
-        //          }
-        //      }
-        //      catch (Exception)
-        //      {
-        //          ViewBag.Message = "Threw exception trying to save call";
-        //      }
-
-        //      return View();
-        //  }
-
         public IActionResult Privacy() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -104,7 +73,7 @@ namespace PetShopProj.Controllers
 
 
         [HttpPost]
-        public IActionResult Search(string text)
+        public IActionResult Search(string text = "")
         {
             //var tpl0 = (animalsByTxt, title);
             //(IEnumerable<Animal> animalsByTxt, string title) tpl1 = (_repo.SearchAnimals(text), text != null ? text : "");

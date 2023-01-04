@@ -9,7 +9,7 @@ namespace PetShopProj.Models.HelperModels.NonGeneric
         public IEnumerable<Animal> AnimalsByTitle { get; private set; }
 
         [DisplayName("Item2")]
-        public string Title { get; private set; }
+        public string Title { get; private set; } = null!;
 
         public SearchTupleModel(IEnumerable<Animal> animalsByTxt, string title)
         {
