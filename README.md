@@ -37,6 +37,32 @@ services:
     restart: always
 ```
 
+<h2>Clear Dependency Injection</h2>
+Here is an implementation of adding all the additional services
+https://github.com/BloodShop/pet-shop/blob/bcf9df3bc1e9b9ca9d170aeadf3c22c8588f338b/Program.cs#L15-L17
+
+```javascript
+public class InfrastuctureServiceInstaller : IServiceInstaller
+{
+    public void Install(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddTransient<IRepository, PetRepository>();
+        string connectionString = configuration["ConnectionStrings:DefaultConnection"];
+        services.AddDatabaseDeveloperPageExceptionFilter();
+        services.AddControllersWithViews().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        });
+        services.AddDbContext<ICallCenterContext, PetDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString));
+    }
+}
+
+public interface IServiceInstaller
+{
+    void Install(IServiceCollection services,IConfiguration configuration);
+}
+```
+
 <h3>What's in this project</h3>
 This is a sample which shows most of the common features of ASP.NET Identity. For more information on it, please visit http://asp.net/identity 
 <ul>
