@@ -7,10 +7,10 @@ using PetShopProj.Repositories;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseKestrel()
+/*builder.WebHost.UseKestrel()
     .UseContentRoot(Directory.GetCurrentDirectory())
-    .UseIISIntegration();
-    /*.UseUrls("http://localhost:8080/");*/
+    .UseIISIntegration()
+    .UseUrls("http://localhost:8080/");*/
 builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(ctx.Configuration));
 builder.Services.InstallerServices(
     builder.Configuration,
@@ -24,7 +24,7 @@ using (var scope = app.Services.CreateScope())
     var userMngr = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
     var roleMngr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-    ctx.Database.EnsureDeleted(); // remove
+    /* ctx.Database.EnsureDeleted(); // remove */
     ctx.Database.EnsureCreated();
 
     var adminRole = new IdentityRole("Admin");
