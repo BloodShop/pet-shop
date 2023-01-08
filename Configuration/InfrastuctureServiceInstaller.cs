@@ -1,15 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetShopProj.Data;
+using PetShopProj.Extensions;
 using PetShopProj.Repositories;
 
 namespace PetShopProj.Configuration
 {
     public class InfrastuctureServiceInstaller : IServiceInstaller
     {
-        public void Install(IServiceCollection services, IConfiguration configuration)
+        public void Install(IServiceCollection services, IConfiguration configuration, string environmentName = "")
         {
             services.AddTransient<IRepository, PetRepository>();
-            string connectionString = configuration["ConnectionStrings:AzureSqlConnection"];
+            string connectionString = configuration.GetConnectionStringFromEnvironment(environmentName);
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddControllersWithViews().AddJsonOptions(options =>
             {

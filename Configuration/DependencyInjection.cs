@@ -7,6 +7,7 @@ namespace PetShopProj.Configuration
         public static IServiceCollection InstallerServices(
             this IServiceCollection services,
             IConfiguration configuration,
+            string environmentName = "",
             params Assembly[] assemblies)
         {
             IEnumerable<IServiceInstaller> serviceInstallers = assemblies
@@ -16,7 +17,7 @@ namespace PetShopProj.Configuration
                 .Cast<IServiceInstaller>();
 
             foreach (var serviceInstaller in serviceInstallers)
-                serviceInstaller.Install(services, configuration);
+                serviceInstaller.Install(services, configuration, environmentName);
 
             return services;
 

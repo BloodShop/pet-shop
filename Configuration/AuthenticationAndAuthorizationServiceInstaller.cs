@@ -5,7 +5,7 @@ namespace PetShopProj.Configuration
 {
     public class AuthenticationAndAuthorizationServiceInstaller : IServiceInstaller
     {
-        public void Install(IServiceCollection services, IConfiguration configuration)
+        public void Install(IServiceCollection services, IConfiguration configuration, string environmentName = "")
         {
             services.AddCors();
             services.AddSession();

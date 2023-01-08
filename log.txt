@@ -1126,3 +1126,5 @@ System.InvalidOperationException: An exception was thrown while attempting to ev
 2023-01-08 15:04:21.751 +02:00 [WRN] Failed to determine the https port for redirect.
 2023-01-08 15:06:12.841 +02:00 [WRN] Failed to determine the https port for redirect.
 2023-01-08 15:09:22.760 +02:00 [WRN] Failed to determine the https port for redirect.
+2023-01-08 16:12:25.790 +02:00 [WRN] Failed to determine the https port for redirect.
+2023-01-08 16:41:50.408 +02:00 [WRN] Failed to determine the https port for redirect.

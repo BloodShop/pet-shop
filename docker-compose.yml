@@ -1,10 +1,15 @@
-version: '3.3'
+version: '3.7'
 
 services:
   db:
     image: bloodshop/petshopdb:1.0
     restart: always
-
+    ports:
+      - '1401:1433'
+    environment:
+        SA_PASSWORD: Pa$$w0rd2019
+        ACCEPT_EULA: Y
+        MSSQL_PID: Developer
   app:
     depends_on:
       - db
