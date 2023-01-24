@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using PetShopProj.Configuration;
 using PetShopProj.Data;
 using PetShopProj.Hubs;
-using PetShopProj.Repositories;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

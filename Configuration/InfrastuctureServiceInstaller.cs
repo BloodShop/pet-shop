@@ -7,7 +7,7 @@ namespace PetShopProj.Configuration
 {
     public class InfrastuctureServiceInstaller : IServiceInstaller
     {
-        public void Install(IServiceCollection services, IConfiguration configuration, string environmentName = "")
+        public void Install(IServiceCollection services, IConfiguration configuration, string environmentName)
         {
             services.AddTransient<IRepository, PetRepository>();
             string connectionString = configuration.GetConnectionStringFromEnvironment(environmentName);
